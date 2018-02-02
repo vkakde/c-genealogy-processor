@@ -1,5 +1,5 @@
 ///brief This program parses and processes genealogy files in the GEDCOM format
-///author Vishwajeet Kakde
+///authors Matthew Josephs, Louis Rozencwajg-Hays, Gabrielle Mccormack, Vishwajeet Kakde
 
 // include headers
 #include <iostream>
