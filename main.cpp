@@ -9,6 +9,7 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <iomanip>
 
 class Individual {
 public:
@@ -301,11 +302,11 @@ public:
             }
         }
 
-        // print unparsed line
+/*        // print unparsed line
         std::cout << "\n--> " << unparsedGedcomLine;
 
         // print parsed line
-        std::cout << "\n<-- " << parsedGedcomLine;
+        std::cout << "\n<-- " << parsedGedcomLine;*/
     }
 
     // parse and iteratively process all lines of gedcom data
@@ -319,14 +320,14 @@ public:
         }
 
         //Test to see if lists were created correctly:
-        for(int i = 0; i < individualList.size(); i++){
+/*        for(int i = 0; i < individualList.size(); i++){
             std::cout << "\n" << individualList[i].id;
             std::cout << "\n" << individualList[i].name;
             
         }
         for(int i = 0; i < familyList.size(); i++){
             std::cout << "\n" << familyList[i].id;
-        }
+        }*/
         
     }
 
@@ -382,25 +383,28 @@ public:
 
     void printIndividualTable() {
 
-    	std::cout << familyList.size() << std::endl;
+    	std::cout <<"\n" << "Individuals" << std::endl;
 
     	std::cout << "------------------------------------------" << std::endl;
-    	std::cout << "|    ID    |" << "|         Name         |" << std::endl;
+    	std::cout << "      ID       |" << "|         Name         " << std::endl;
     	std::cout << "------------------------------------------" << std::endl;
 
 
     	for (int i = 0; i < individualList.size(); ++i) {
-    		std::cout << "|    " << individualList[i].id << "    ||    " << individualList[i].name << "    |" << std::endl;
+    		std::cout << "     " << std::setw(10) << std::left << individualList[i].id << "||    " << individualList[i].name << "    " << std::endl;
     	}
-        std::cout << "------------------------------------------------" << std::endl;
+        std::cout << "------------------------------------------" << std::endl;
     }
 
     void printFamilyTable() {
     	std::string husb_name;
     	std::string wife_name;
-    	std::cout << "------------------------------------------------------------------------------------------------------------------" << std::endl;
-    	std::cout << "|    ID    |" << "|    Husband ID    |" << "|    Husband Name    |" << "|    Wife ID    |" << "|    Wife Name    |" << std::endl;
-		std::cout << "------------------------------------------------------------------------------------------------------------------" << std::endl;
+
+    	std::cout <<"\n" << "Families" << std::endl;
+
+    	std::cout << "------------------------------------------------------------------------------------------------------" << std::endl;
+    	std::cout << "      ID       |" << "|   Husband ID  |" << "|      Husband Name      |" << "|    Wife ID    |" << "|       Wife Name       " << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------" << std::endl;
 
     	for (int i = 0; i < familyList.size(); ++i) {
     		// find husb name based on id
@@ -417,8 +421,15 @@ public:
     				break;
     			}
     		}
-    		std::cout << "|    " << familyList[i].id << "    ||    " << familyList[i].husb << "    ||    " << husb_name << "    ||    " << familyList[i].wife << "    ||    " << wife_name << std::endl;
+    		std::cout << "     " << std::setw(10) << std::left << familyList[i].id
+    				<< "||     " << std::setw(10) << std::left << familyList[i].husb
+					<< "||    " << std::setw(20) << std::left << husb_name
+					<< "||     " << std::setw(10) << std::left << familyList[i].wife
+					<< "||    " << std::setw(20) << std::left << wife_name << std::endl;
     	}
+    	std::cout << "------------------------------------------------------------------------------------------------------" << std::endl;
+    	std::cout << std::endl;
+
     }
 };
 
