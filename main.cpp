@@ -320,12 +320,12 @@ public:
 
         //Test to see if lists were created correctly:
         for(int i = 0; i < individualList.size(); i++){
-            std::cout << individualList[i].id << std::endl;
-            std::cout << individualList[i].name << std::endl;
+            std::cout << "\n" << individualList[i].id;
+            std::cout << "\n" << individualList[i].name;
             
         }
         for(int i = 0; i < familyList.size(); i++){
-            std::cout << familyList[i].id << std::endl;
+            std::cout << "\n" << familyList[i].id;
         }
         
     }
@@ -334,10 +334,10 @@ public:
         int index;
         if (isInd) {
             index = individualList.size()-1;
-            if(index <= 0){
+            if(index < 0){
                 return;
             }
-            //TODO: Add the attribute to the last individual in the vector (individualList)
+            //Add the attribute to the last individual in the vector (individualList)
             if (tag == "NAME") {
                 individualList[index].name = attribute;
             }
@@ -359,10 +359,9 @@ public:
         }
         else {
             index = familyList.size() - 1;
-            if(index <= 0){
+            if(index < 0){
                 return;
             }
-            //TODO: Add the attribute to the last family in the vector (individualList)
             if (tag == "HUSB") {
                 familyList[index].husb = attribute;
             }
