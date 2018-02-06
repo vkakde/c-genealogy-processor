@@ -379,6 +379,31 @@ public:
             }
         }
     }
+
+    void printIndividualTable() {
+
+    	std::cout << familyList.size() << std::endl;
+
+    	std::cout << "------------------------------------------" << std::endl;
+    	std::cout << "|    ID    |" << "|         Name         |" << std::endl;
+    	std::cout << "------------------------------------------" << std::endl;
+
+
+    	for (int i = 0; i < individualList.size(); ++i) {
+    		std::cout << "|    " << individualList[i].id << "    ||    " << individualList[i].name << "    |" << std::endl;
+    	}
+        std::cout << "------------------------------------------------" << std::endl;
+    }
+
+    void printFamilyTable() {
+    	std::cout << "------------------------------------------------------------------------------------------------------------------" << std::endl;
+    	std::cout << "|    ID    |" << "|    Husband ID    |" << "|    Husband Name    |" << "|    Wife ID    |" << "|    Wife Name    |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------" << std::endl;
+
+    	for (int i = 0; i < familyList.size(); ++i) {
+    		std::cout << "|    " << familyList[i].id << "    ||    " << familyList[i].husb << "    |" << std::endl;
+    	}
+    }
 };
 
 int main() {
@@ -393,6 +418,10 @@ int main() {
 
     // parse gedcom data
     gedcomInstance.parseAll();
+
+    gedcomInstance.printIndividualTable();
+
+    gedcomInstance.printFamilyTable();
 
     return 0;
 }
