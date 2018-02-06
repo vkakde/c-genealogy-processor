@@ -10,8 +10,6 @@
 #include <fstream>
 #include <algorithm>
 
-
-
 class Individual {
 public:
     //No getters/setters for this many fields - it shouldn't be necessary
@@ -26,7 +24,6 @@ public:
     Individual(std::string cId) {
         id = cId;
     }
-
 };
 
 class Family {
@@ -40,10 +37,8 @@ public:
 
     Family(std::string cId) {
         id = cId;
-    }
-    
+    }    
 };
-
 
 class gedcom {
     std::map<std::string, int> supportedTagsAndLevels;
@@ -113,6 +108,7 @@ public:
     return false;
     }
     */
+
     std::string isIndiOrFam(std::vector<std::string> lineElements) {
         ///cite https://stackoverflow.com/a/19266247/2535979
         std::locale loc;
@@ -128,8 +124,8 @@ public:
         }
         return "";
     }
-
-    bool isTagValid(std::string tagLevel, std::string tagName) {
+    
+    bool isTagValid(std::string tagLevel, std::string tagName, int tagIndex) {
         // convert tag under test to lower case
         ///cite https://stackoverflow.com/a/19266247/2535979
         std::locale loc;
@@ -149,12 +145,24 @@ public:
             supportedTagsAndLevels_LowerCase.insert(std::make_pair(loweredTag, level));
         }
 
-        // if tag under test matches any supported tag and the tag's level is correct, it is valid. Return true.
+        // if tag under test matches any supported tag, tag's level and index is correct - it is valid. Return true.
         for (auto i : supportedTagsAndLevels_LowerCase) {
             if (i.first == testTagName_LowerCase) {
                 // Okay, tag is supported. But is the level valid?
                 if (i.second == tagLevel) {
-                    return true;
+                    // Okay, tag is supported and level is valid. But is tag index okay?
+                    ///remark In line "0 INDI id", tag name "INDI" and level "0" are valid. 
+                    ///       But tag placement at index 1 is invalid, it should be "0 id INDI"
+                    if(testTagName_LowerCase=="fam" || testTagName_LowerCase=="indi"){
+                        if(tagIndex == 2){
+                            return true;
+                        }
+                    }
+                    else{
+                        if(tagIndex == 1){
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -202,7 +210,7 @@ public:
 
             // is tag valid?
             ///remark A valid tag is one that is within the scope of cs555 project, refer doc "Project Overview"
-            if (isTagValid(lineElements[0], lineElements[1])) {
+            if (isTagValid(lineElements[0], lineElements[1], 1)) {
                 parsedGedcomLine += "Y";
             }
             else {
@@ -277,7 +285,7 @@ public:
 
             // is tag valid?
             ///remark A valid tag is one that is within the scope of cs555 project, refer doc "Project Overview"
-            if (isTagValid(lineElements[0], lineElements[2])) {
+            if (isTagValid(lineElements[0], lineElements[2], 2)) {
                 parsedGedcomLine += "Y";
             }
             else {
@@ -310,7 +318,7 @@ public:
             parseLine(gedcomLine);
         }
 
-        /* Test to see if lists were created correctly:
+        //Test to see if lists were created correctly:
         for(int i = 0; i < individualList.size(); i++){
             std::cout << individualList[i].id << std::endl;
             std::cout << individualList[i].name << std::endl;
@@ -319,7 +327,7 @@ public:
         for(int i = 0; i < familyList.size(); i++){
             std::cout << familyList[i].id << std::endl;
         }
-        */
+        
     }
 
     void addAttribute(std::string tag, std::string attribute) {
@@ -372,8 +380,6 @@ public:
             }
         }
     }
-
-
 };
 
 int main() {
