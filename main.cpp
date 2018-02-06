@@ -396,12 +396,28 @@ public:
     }
 
     void printFamilyTable() {
+    	std::string husb_name;
+    	std::string wife_name;
     	std::cout << "------------------------------------------------------------------------------------------------------------------" << std::endl;
     	std::cout << "|    ID    |" << "|    Husband ID    |" << "|    Husband Name    |" << "|    Wife ID    |" << "|    Wife Name    |" << std::endl;
 		std::cout << "------------------------------------------------------------------------------------------------------------------" << std::endl;
 
     	for (int i = 0; i < familyList.size(); ++i) {
-    		std::cout << "|    " << familyList[i].id << "    ||    " << familyList[i].husb << "    |" << std::endl;
+    		// find husb name based on id
+    		for (int j = 0; j < individualList.size(); j++) {
+    			if (familyList[i].husb == individualList[j].id) {
+    				husb_name = individualList[j].name;
+    				break;
+    			}
+    		}
+    		// find wife name based on id
+    		for (int k = 0; k < individualList.size(); k++) {
+    			if (familyList[i].wife == individualList[k].id) {
+    				wife_name = individualList[k].name;
+    				break;
+    			}
+    		}
+    		std::cout << "|    " << familyList[i].id << "    ||    " << familyList[i].husb << "    ||    " << husb_name << "    ||    " << familyList[i].wife << "    ||    " << wife_name << std::endl;
     	}
     }
 };
