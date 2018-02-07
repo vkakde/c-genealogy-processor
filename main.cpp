@@ -1,5 +1,6 @@
 ///brief This program parses and processes genealogy files in the GEDCOM format
 ///authors Matthew Josephs, Louis Rozencwajg-Hays, Gabrielle Mccormack, Vishwajeet Kakde
+// Link to github: https://github.com/vkakde/sw555MLGV
 
 // include headers
 #include <iostream>
@@ -451,8 +452,10 @@ int main() {
     // parse gedcom data
     gedcomInstance.parseAll();
 
+    // print table of reords showing individuals' data
     gedcomInstance.printIndividualTable();
 
+    // print table of reords showing families' data
     gedcomInstance.printFamilyTable();
 
     return 0;
