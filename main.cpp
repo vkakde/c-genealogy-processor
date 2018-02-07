@@ -34,7 +34,7 @@ public:
     std::string wife;
     std::string marrDate;
     std::string divorceDate;
-    std::vector<Individual> children;
+    std::vector<std::string> children;
 
     Family(std::string cId) {
         id = cId;
@@ -202,8 +202,8 @@ public:
 
         // process second and third elements depending on tag (is it INDI/FAM)
         std::string indiOrFam = isIndiOrFam(lineElements);
+		bool tagIsValid = false; 
         if (indiOrFam == "") {
-            //TODO: Add attribute to individual or Fam (pass in lineElements[1],lineElements[2]) 
             parsedGedcomLine += lineElements[1];
 
             // add delimiter
@@ -213,6 +213,8 @@ public:
             ///remark A valid tag is one that is within the scope of cs555 project, refer doc "Project Overview"
             if (isTagValid(lineElements[0], lineElements[1], 1)) {
                 parsedGedcomLine += "Y";
+				tagIsValid = true;
+				
             }
             else {
                 parsedGedcomLine += "N";
@@ -227,25 +229,30 @@ public:
 
                 //We know that there's a tag and a corresponding attribute, so add it:
                 if (lineElements[1] == "DATE") {
-                    if (deathDate) {
-                        addAttribute("DEAT", lineElements[2]);
-                        deathDate = false;
-                    }
-                    if (birthDate) {
-                        addAttribute("BIRT", lineElements[2]);
-                        birthDate = false;
-                    }
-                    if (marrDate) {
-                        addAttribute("MARR", lineElements[2]);
-                        marrDate = false;
-                    }
-                    if (divDate) {
-                        addAttribute("DIV", lineElements[2]);
-                        divDate = false;
-                    }
+					if(tagIsValid){
+						if (deathDate) {
+							addAttribute("DEAT", lineElements[2]);
+						}
+						if (birthDate) {
+							addAttribute("BIRT", lineElements[2]);
+						}
+						if (marrDate) {
+							addAttribute("MARR", lineElements[2]);
+						}
+						if (divDate) {
+							addAttribute("DIV", lineElements[2]);
+						}
+					}
+					
+					deathDate = false;
+					birthDate = false;
+					marrDate = false;
+					divDate = false;
                 }
                 else{
-                    addAttribute(lineElements[1], lineElements[2]);
+					if(tagIsValid){
+						addAttribute(lineElements[1], lineElements[2]);
+					}
                 }
             }
             //These should only consist of the tags before dates. Save this tag so we can get its date on the next iteration 
@@ -264,21 +271,7 @@ public:
                 }
             }
         }
-        else { 
-            if (indiOrFam == "fam") {
-                Family family(lineElements[1]);
-                familyList.push_back(family);
-
-                isInd = false;
-            }
-            else {
-                Individual individual(lineElements[1]);
-                individualList.push_back(individual);
-
-                isInd = true;
-            }
-
-
+        else {
             parsedGedcomLine += lineElements[2];
 
             // add delimiter
@@ -288,6 +281,18 @@ public:
             ///remark A valid tag is one that is within the scope of cs555 project, refer doc "Project Overview"
             if (isTagValid(lineElements[0], lineElements[2], 2)) {
                 parsedGedcomLine += "Y";
+				if (indiOrFam == "fam") {
+					Family family(lineElements[1]);
+					familyList.push_back(family);
+
+					isInd = false;
+				}
+				else {
+					Individual individual(lineElements[1]);
+					individualList.push_back(individual);
+
+					isInd = true;
+				}
             }
             else {
                 parsedGedcomLine += "N";
