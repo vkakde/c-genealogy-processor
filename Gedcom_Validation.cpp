@@ -46,10 +46,22 @@ bool Gedcom::gedcom::isTagValid(std::string tagLevel, std::string tagName, int t
 
 ///\author vkakde
 bool Gedcom::gedcom::US02() {
-	//boost::gregorian::date birthDate = { 2001, 10, 9 };
-	//boost::gregorian::date marrDate = { 2020, 10, 9 };
-	//std::cout << gedcomInstance.marriageAfter14(birthDate, marrDate) << "\n";
-	return true;
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_individual.famsId == it_family.id) {
+				///\remark Check date entry exists (individual may be un-married)
+				if(it_individual.birthDay.length()!=0 && it_family.marrDate.length()!=0){
+					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
+					if (boost::gregorian::from_uk_string(it_individual.birthDay) >= boost::gregorian::from_uk_string(it_family.marrDate)) {
+						std::cout << "\nUS02 Fail (Birth before marriage) for Individual with ID : " << it_individual.id << "!\n";
+						result = false;
+					}
+				}
+			}
+		}
+	}
+	return result;
 }
 
 ///\author vkakde
