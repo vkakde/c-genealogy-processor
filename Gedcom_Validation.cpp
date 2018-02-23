@@ -66,5 +66,29 @@ bool Gedcom::gedcom::US02() {
 
 ///\author vkakde
 bool Gedcom::gedcom::US08() {
-	return true;
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_individual.famcId == it_family.id) {
+				///\remark Check date entry exists (parents' marriage date may be un-available)
+				if (it_individual.birthDay.length() != 0 && it_family.marrDate.length() != 0) {
+					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
+					if (boost::gregorian::from_uk_string(it_individual.birthDay) <= boost::gregorian::from_uk_string(it_family.marrDate)) {
+						result = false;
+						std::cout << "\nUS08 Fail (Birth before marriage of parents) for Individual with ID : " << it_individual.id << "!\n";
+					}
+				}
+
+				///\remark Check date entry exists (parents' divorce date may be un-available)
+				if (it_individual.birthDay.length() != 0 && it_family.divorceDate.length() != 0) {
+					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
+					if (boost::gregorian::from_uk_string(it_individual.birthDay) - boost::gregorian::from_uk_string(it_family.divorceDate) >= boost::gregorian::days(9*30)) {
+						result = false;
+						std::cout << "\nUS08 Fail (Birth 9 months beyond of parents' divorce) for Individual with ID : " << it_individual.id << "!\n";
+					}
+				}
+			}
+		}
+	}
+	return result;
 }
