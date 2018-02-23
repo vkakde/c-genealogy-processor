@@ -64,6 +64,46 @@ bool Gedcom::gedcom::US02() {
 	return result;
 }
 
+///\author LouisRH
+bool Gedcom::gedcom::US05() {
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_individual.famsId == it_family.id) {
+				///\remark Check date entry exists (individual may be un-married)
+				if (it_individual.deathDate.length() != 0 && it_family.marrDate.length() != 0) {
+					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
+					if (boost::gregorian::from_uk_string(it_family.marrDate) > boost::gregorian::from_uk_string(it_individual.deathDate)) {
+						std::cout << "\nUS05 Fail (Marriage before death) for Individual with ID : " << it_individual.id << "!\n";
+						result = false;
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
+///\author LouisRH
+bool Gedcom::gedcom::US06() {
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_individual.famsId == it_family.id) {
+				///\remark Check date entry exists (individual may be un-married)
+				if (it_individual.deathDate.length() != 0 && it_family.divorceDate.length() != 0) {
+					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
+					if (boost::gregorian::from_uk_string(it_family.divorceDate) > boost::gregorian::from_uk_string(it_individual.deathDate)) {
+						std::cout << "\nUS06 Fail (Divorce before death) for Individual with ID : " << it_individual.id << "!\n";
+						result = false;
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
 ///\author vkakde
 bool Gedcom::gedcom::US08() {
 	bool result = true;
