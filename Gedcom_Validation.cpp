@@ -84,7 +84,7 @@ bool Gedcom::gedcom::US08() {
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
 					if (boost::gregorian::from_uk_string(it_individual.birthDay) - boost::gregorian::from_uk_string(it_family.divorceDate) >= boost::gregorian::days(9*30)) {
 						result = false;
-						std::cout << "\nUS08 Fail (Birth 9 months beyond of parents' divorce) for Individual with ID : " << it_individual.id << "!\n";
+						std::cout << "\nUS08 Fail (Birth 9 months beyond parents' divorce) for Individual with ID : " << it_individual.id << "!\n";
 					}
 				}
 			}
