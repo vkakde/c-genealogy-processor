@@ -104,6 +104,19 @@ void Gedcom::gedcom::parseLine(std::string unparsedGedcomLine) {
 			// append arguments
 			parsedGedcomLine += lineElements[2];
 
+			if (lineElements[1] == "DEAT") {
+				deathDate = true;
+			}
+			if (lineElements[1] == "BIRT") {
+				birthDate = true;
+			}
+			if (lineElements[1] == "MARR") {
+				marrDate = true;
+			}
+			if (lineElements[1] == "DIV") {
+				divDate = true;
+			}
+
 			//We know that there's a tag and a corresponding attribute, so add it:
 			if (lineElements[1] == "DATE") {
 				if (tagIsValid) {
@@ -133,6 +146,7 @@ void Gedcom::gedcom::parseLine(std::string unparsedGedcomLine) {
 			}
 		}
 		//These should only consist of the tags before dates. Save this tag so we can get its date on the next iteration 
+		
 		else {
 			if (lineElements[1] == "DEAT") {
 				deathDate = true;
@@ -147,6 +161,7 @@ void Gedcom::gedcom::parseLine(std::string unparsedGedcomLine) {
 				divDate = true;
 			}
 		}
+		
 	}
 	else {
 		parsedGedcomLine += lineElements[2];
