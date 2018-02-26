@@ -44,6 +44,48 @@ bool Gedcom::gedcom::isTagValid(std::string tagLevel, std::string tagName, int t
 	return false;
 }
 
+
+// Author: mjosephs
+bool Gedcom::gedcom::US01() {
+	bool result = true;
+	boost::gregorian::date today = boost::gregorian::day_clock::local_day();
+
+	//Go through individual list first, then family list because we need to check all dates
+	for (auto it_individual : individualList) {
+		//Check date entry exists
+		if (it_individual.birthDay.length() != 0) {
+			if (boost::gregorian::from_uk_string(it_individual.birthDay) >= today) {
+				std::cout << "\nUS01 Fail (Date before Current Date) for Individual with ID : " << it_individual.id << "!\n";
+				result = false;
+			}
+		}
+		if (it_individual.deathDate.length() != 0) {
+			if (boost::gregorian::from_uk_string(it_individual.deathDate) >= today) {
+				std::cout << "\nUS01 Fail (Date before Current Date) for Individual with ID : " << it_individual.id << "!\n";
+				result = false;
+			}
+		}
+	}
+	for (auto fam : familyList) {
+		//Check date entry exists
+		if (fam.divorceDate.length() != 0) {
+			if (boost::gregorian::from_uk_string(fam.divorceDate) >= today) {
+				std::cout << "\nUS01 Fail (Date before Current Date) for Family with ID : " << fam.id << "!\n";
+				result = false;
+			}
+		}
+		if (fam.marrDate.length() != 0) {
+			if (boost::gregorian::from_uk_string(fam.marrDate) >= today) {
+				std::cout << "\nUS01 Fail (Date before Current Date) for Family with ID : " << fam.id << "!\n";
+				result = false;
+			}
+		}
+	}
+	return result;
+}
+
+
+
 ///\author vkakde
 bool Gedcom::gedcom::US02() {
 	bool result = true;
@@ -60,6 +102,22 @@ bool Gedcom::gedcom::US02() {
 				}
 			}
 		}
+	}
+	return result;
+}
+
+// Author: mjosephs
+bool Gedcom::gedcom::US04() {
+	bool result = true;
+	for (auto fam : familyList) {
+			//Check if dates exist
+		if (fam.marrDate.length() != 0 && fam.divorceDate.length() != 0) {
+			if (boost::gregorian::from_uk_string(fam.marrDate) >= boost::gregorian::from_uk_string(fam.divorceDate)) {
+				std::cout << "\nUS04 Fail (Marriage before Divorce) for Family with ID : " << fam.id << "!\n";
+				result = false;
+			}
+		}
+		
 	}
 	return result;
 }
