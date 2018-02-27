@@ -106,6 +106,43 @@ bool Gedcom::gedcom::US02() {
 	return result;
 }
 
+///\author gmccorma
+bool Gedcom::gedcom::US03() {
+	bool result = true;
+	for (auto it_individual : individualList) {
+		// Tests to see if the birth date is after the death date.  Returns false if that is the case, true otherwise.
+		if (it_individual.deathDate != "") {
+			std::cout << "Birth: " << boost::gregorian::from_uk_string(it_individual.birthDay).year() << std::endl;
+			std::cout << "Death: " << boost::gregorian::from_uk_string(it_individual.deathDate).year() << std::endl;
+			// if birth and death year same, and birth and death month same, and birth day greater than death day
+			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() == 0) {
+				if (boost::gregorian::from_uk_string(it_individual.deathDate).month() - boost::gregorian::from_uk_string(it_individual.birthDay).month() == 0) {
+					if (boost::gregorian::from_uk_string(it_individual.deathDate).day() - boost::gregorian::from_uk_string(it_individual.birthDay).day() < 0) {
+						std::cout << "\nUS03 Fail (Birth before death) for Individual with ID : " << it_individual.id << "!\n";
+						result = false;
+					}
+				}
+			}
+			// if birth and death year same, and birth month greater than death month
+			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() == 0) {
+				if (boost::gregorian::from_uk_string(it_individual.deathDate).month() - boost::gregorian::from_uk_string(it_individual.birthDay).month() < 0) {
+					std::cout << "\nUS03 Fail (Birth before death) for Individual with ID : " << it_individual.id << "!\n";
+					result = false;
+				}
+			}
+			// if birth year greater than death year
+			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() < 0) {
+				std::cout << "\nUS03 Fail (Birth before death) for Individual with ID : " << it_individual.id << "!\n";
+				result = false;
+			}
+			else {
+				result = true;
+			}
+		}
+		}
+	return result;
+}
+
 // Author: mjosephs
 bool Gedcom::gedcom::US04() {
 	bool result = true;
@@ -158,6 +195,29 @@ bool Gedcom::gedcom::US06() {
 				}
 			}
 		}
+	}
+	return result;
+}
+
+///\author gmccorma
+bool Gedcom::gedcom::US07() {
+	bool result = true;
+	for (auto it_individual : individualList) {
+		if (it_individual.deathDate != "") {
+			// Death should be less than 150 years after birth for dead people
+			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() > 150) {
+				result = false;
+				std::cout << "\nUS07 Fail (Less than 150 yeards old) for Individual with ID : " << it_individual.id << "!\n";
+			}
+		}
+		// Current date should be less than 150 years after birth for all living people
+		boost::posix_time::ptime timeLocal = boost::posix_time::second_clock::local_time();
+		boost::gregorian::date dateObj = timeLocal.date();
+		if (dateObj.year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() > 150) {
+			result = false;
+			std::cout << "\nUS07 Fail (Less than 150 yeards old) for Individual with ID : " << it_individual.id << "!\n";
+		}
+
 	}
 	return result;
 }

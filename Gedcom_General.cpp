@@ -1,8 +1,26 @@
 #include "Gedcom.h"
 
 Gedcom::gedcom::gedcom() {
-	supportedTagsAndLevels = { { "INDI",0 },{ "NAME",1 },{ "SEX",1 },{ "BIRT",1 },{ "DEAT",1 },{ "FAMC",1 },{ "FAMS",1 },{ "FAM",0 },{ "MARR",1 },{ "HUSB",1 },{ "WIFE",1 },
-	{ "CHIL",1 },{ "DIV",1 },{ "DATE",2 },{ "HEAD",0 },{ "TRLR",0 },{ "NOTE",0 } };
+	//supportedTagsAndLevels = { { "INDI",0 },{ "NAME",1 },{ "SEX",1 },{ "BIRT",1 },{ "DEAT",1 },{ "FAMC",1 },{ "FAMS",1 },{ "FAM",0 },{ "MARR",1 },{ "HUSB",1 },{ "WIFE",1 },
+	//{ "CHIL",1 },{ "DIV",1 },{ "DATE",2 },{ "HEAD",0 },{ "TRLR",0 },{ "NOTE",0 } };
+
+	supportedTagsAndLevels.insert(std::make_pair("INDI", 0));
+	supportedTagsAndLevels.insert(std::make_pair("NAME", 1));
+	supportedTagsAndLevels.insert(std::make_pair("SEX", 1));
+	supportedTagsAndLevels.insert(std::make_pair("BIRT", 1));
+	supportedTagsAndLevels.insert(std::make_pair("DEAT", 1));
+	supportedTagsAndLevels.insert(std::make_pair("FAMC", 1));
+	supportedTagsAndLevels.insert(std::make_pair("FAMS", 1));
+	supportedTagsAndLevels.insert(std::make_pair("FAM", 0));
+	supportedTagsAndLevels.insert(std::make_pair("MARR", 1));
+	supportedTagsAndLevels.insert(std::make_pair("HUSB", 1));
+	supportedTagsAndLevels.insert(std::make_pair("WIFE", 1));
+	supportedTagsAndLevels.insert(std::make_pair("CHIL", 1));
+	supportedTagsAndLevels.insert(std::make_pair("DIV", 1));
+	supportedTagsAndLevels.insert(std::make_pair("DATE", 2));
+	supportedTagsAndLevels.insert(std::make_pair("HEAD", 0));
+	supportedTagsAndLevels.insert(std::make_pair("TRLR", 0));
+	supportedTagsAndLevels.insert(std::make_pair("NOTE", 0));
 
 	deathDate = false;
 	birthDate = false;
