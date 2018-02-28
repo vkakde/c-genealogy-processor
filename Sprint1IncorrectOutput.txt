@@ -1,0 +1,39 @@
+Individuals
+------------------------------------------
+      ID       ||         Name
+------------------------------------------
+     @I1@      ||    John /Smith/
+     @I2@      ||    Jack /Smith/
+     @I3@      ||    Catherine /Adams/
+     @I4@      ||    Samuel /Smith/
+     @I5@      ||    Karen /Stevens/
+     @I6@      ||    Mack /Smith/
+     @I7@      ||    Millie /Greene/
+     @I8@      ||    Malcolm /Joseph/
+     @I9@      ||    Erin /McCallister/
+     @I10@     ||    Emily /Smith/
+------------------------------------------
+
+Families
+------------------------------------------------------------------------------------------------------
+      ID       ||   Husband ID  ||      Husband Name      ||    Wife ID    ||       Wife Name
+------------------------------------------------------------------------------------------------------
+     @F1@      ||     @I2@      ||    Jack /Smith/        ||     @I3@      ||    Catherine /Adams/
+     @F2@      ||     @I2@      ||    Jack /Smith/        ||     @I9@      ||    Erin /McCallister/
+     @F3@      ||     @I4@      ||    Samuel /Smith/      ||     @I5@      ||    Karen /Stevens/
+     @F4@      ||     @I6@      ||    Mack /Smith/        ||     @I7@      ||    Millie /Greene/
+     @F5@      ||     @I8@      ||    Malcolm /Joseph/    ||     @I7@      ||    Millie /Greene/
+------------------------------------------------------------------------------------------------------
+
+US01 Fail (Date before Current Date) for Individual with ID : @I6@
+US01 Fail (Date before Current Date) for Individual with ID : @I10@
+US02 Fail (Birth before marriage) for Individual with ID : @I6@
+US03 Fail (Birth before death) for Individual with ID : @I5@
+US03 Fail (Birth before death) for Individual with ID : @I6@
+US04 Fail (Marriage before Divorce) for Family with ID : @F4@
+US05 Fail (Marriage before death) for Individual with ID : @I5@
+US05 Fail (Marriage before death) for Individual with ID : @I6@
+US06 Fail (Divorce before death) for Individual with ID : @I6@
+US07 Fail (Less than 150 yeards old) for Individual with ID : @I4@
+US08 Fail (Birth before marriage of parents) for Individual with ID : @I1@
+Some errors found in input file. Please check error messages for details.
