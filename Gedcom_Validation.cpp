@@ -55,13 +55,13 @@ bool Gedcom::gedcom::US01() {
 		//Check date entry exists
 		if (it_individual.birthDay.length() != 0) {
 			if (boost::gregorian::from_uk_string(it_individual.birthDay) >= today) {
-				std::cout << "\nUS01 Fail (Date before Current Date) for Individual with ID : " << it_individual.id << "!\n";
+				std::cout << "US01 Fail (Date before Current Date) for Individual with ID : " << it_individual.id << std::endl;
 				result = false;
 			}
 		}
 		if (it_individual.deathDate.length() != 0) {
 			if (boost::gregorian::from_uk_string(it_individual.deathDate) >= today) {
-				std::cout << "\nUS01 Fail (Date before Current Date) for Individual with ID : " << it_individual.id << "!\n";
+				std::cout << "US01 Fail (Date before Current Date) for Individual with ID : " << it_individual.id << std::endl;
 				result = false;
 			}
 		}
@@ -70,13 +70,13 @@ bool Gedcom::gedcom::US01() {
 		//Check date entry exists
 		if (fam.divorceDate.length() != 0) {
 			if (boost::gregorian::from_uk_string(fam.divorceDate) >= today) {
-				std::cout << "\nUS01 Fail (Date before Current Date) for Family with ID : " << fam.id << "!\n";
+				std::cout << "US01 Fail (Date before Current Date) for Family with ID : " << fam.id << std::endl;
 				result = false;
 			}
 		}
 		if (fam.marrDate.length() != 0) {
 			if (boost::gregorian::from_uk_string(fam.marrDate) >= today) {
-				std::cout << "\nUS01 Fail (Date before Current Date) for Family with ID : " << fam.id << "!\n";
+				std::cout << "US01 Fail (Date before Current Date) for Family with ID : " << fam.id << std::endl;
 				result = false;
 			}
 		}
@@ -96,7 +96,7 @@ bool Gedcom::gedcom::US02() {
 				if(it_individual.birthDay.length()!=0 && it_family.marrDate.length()!=0){
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
 					if (boost::gregorian::from_uk_string(it_individual.birthDay) >= boost::gregorian::from_uk_string(it_family.marrDate)) {
-						std::cout << "\nUS02 Fail (Birth before marriage) for Individual with ID : " << it_individual.id << "!\n";
+						std::cout << "US02 Fail (Birth before marriage) for Individual with ID : " << it_individual.id << std::endl;
 						result = false;
 					}
 				}
@@ -112,13 +112,13 @@ bool Gedcom::gedcom::US03() {
 	for (auto it_individual : individualList) {
 		// Tests to see if the birth date is after the death date.  Returns false if that is the case, true otherwise.
 		if (it_individual.deathDate != "") {
-			std::cout << "Birth: " << boost::gregorian::from_uk_string(it_individual.birthDay).year() << std::endl;
-			std::cout << "Death: " << boost::gregorian::from_uk_string(it_individual.deathDate).year() << std::endl;
+			//std::cout << "Birth: " << boost::gregorian::from_uk_string(it_individual.birthDay).year() << std::endl;
+			//std::cout << "Death: " << boost::gregorian::from_uk_string(it_individual.deathDate).year() << std::endl;
 			// if birth and death year same, and birth and death month same, and birth day greater than death day
 			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() == 0) {
 				if (boost::gregorian::from_uk_string(it_individual.deathDate).month() - boost::gregorian::from_uk_string(it_individual.birthDay).month() == 0) {
 					if (boost::gregorian::from_uk_string(it_individual.deathDate).day() - boost::gregorian::from_uk_string(it_individual.birthDay).day() < 0) {
-						std::cout << "\nUS03 Fail (Birth before death) for Individual with ID : " << it_individual.id << "!\n";
+						std::cout << "US03 Fail (Birth before death) for Individual with ID : " << it_individual.id << std::endl;
 						result = false;
 					}
 				}
@@ -126,13 +126,13 @@ bool Gedcom::gedcom::US03() {
 			// if birth and death year same, and birth month greater than death month
 			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() == 0) {
 				if (boost::gregorian::from_uk_string(it_individual.deathDate).month() - boost::gregorian::from_uk_string(it_individual.birthDay).month() < 0) {
-					std::cout << "\nUS03 Fail (Birth before death) for Individual with ID : " << it_individual.id << "!\n";
+					std::cout << "US03 Fail (Birth before death) for Individual with ID : " << it_individual.id << std::endl;
 					result = false;
 				}
 			}
 			// if birth year greater than death year
 			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() < 0) {
-				std::cout << "\nUS03 Fail (Birth before death) for Individual with ID : " << it_individual.id << "!\n";
+				std::cout << "US03 Fail (Birth before death) for Individual with ID : " << it_individual.id << std::endl;
 				result = false;
 			}
 			else {
@@ -150,7 +150,7 @@ bool Gedcom::gedcom::US04() {
 			//Check if dates exist
 		if (fam.marrDate.length() != 0 && fam.divorceDate.length() != 0) {
 			if (boost::gregorian::from_uk_string(fam.marrDate) >= boost::gregorian::from_uk_string(fam.divorceDate)) {
-				std::cout << "\nUS04 Fail (Marriage before Divorce) for Family with ID : " << fam.id << "!\n";
+				std::cout << "US04 Fail (Marriage before Divorce) for Family with ID : " << fam.id << std::endl;
 				result = false;
 			}
 		}
@@ -169,7 +169,7 @@ bool Gedcom::gedcom::US05() {
 				if (it_individual.deathDate.length() != 0 && it_family.marrDate.length() != 0) {
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
 					if (boost::gregorian::from_uk_string(it_family.marrDate) > boost::gregorian::from_uk_string(it_individual.deathDate)) {
-						std::cout << "\nUS05 Fail (Marriage before death) for Individual with ID : " << it_individual.id << "!\n";
+						std::cout << "US05 Fail (Marriage before death) for Individual with ID : " << it_individual.id << std::endl;
 						result = false;
 					}
 				}
@@ -189,7 +189,7 @@ bool Gedcom::gedcom::US06() {
 				if (it_individual.deathDate.length() != 0 && it_family.divorceDate.length() != 0) {
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
 					if (boost::gregorian::from_uk_string(it_family.divorceDate) > boost::gregorian::from_uk_string(it_individual.deathDate)) {
-						std::cout << "\nUS06 Fail (Divorce before death) for Individual with ID : " << it_individual.id << "!\n";
+						std::cout << "US06 Fail (Divorce before death) for Individual with ID : " << it_individual.id << std::endl;
 						result = false;
 					}
 				}
@@ -202,20 +202,25 @@ bool Gedcom::gedcom::US06() {
 ///\author gmccorma
 bool Gedcom::gedcom::US07() {
 	bool result = true;
+	bool printed = false;
 	for (auto it_individual : individualList) {
 		if (it_individual.deathDate != "") {
 			// Death should be less than 150 years after birth for dead people
 			if (boost::gregorian::from_uk_string(it_individual.deathDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() > 150) {
 				result = false;
-				std::cout << "\nUS07 Fail (Less than 150 yeards old) for Individual with ID : " << it_individual.id << "!\n";
+				std::cout << "US07 Fail (Less than 150 yeards old) for Individual with ID : " << it_individual.id << std::endl;
+				printed = true;
 			}
 		}
-		// Current date should be less than 150 years after birth for all living people
-		boost::posix_time::ptime timeLocal = boost::posix_time::second_clock::local_time();
-		boost::gregorian::date dateObj = timeLocal.date();
-		if (dateObj.year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() > 150) {
-			result = false;
-			std::cout << "\nUS07 Fail (Less than 150 yeards old) for Individual with ID : " << it_individual.id << "!\n";
+
+		if (!printed) {
+			// Current date should be less than 150 years after birth for all living people
+			boost::posix_time::ptime timeLocal = boost::posix_time::second_clock::local_time();
+			boost::gregorian::date dateObj = timeLocal.date();
+			if (dateObj.year() - boost::gregorian::from_uk_string(it_individual.birthDay).year() > 150) {
+				result = false;
+				std::cout << "US07 Fail (Less than 150 yeards old) for Individual with ID : " << it_individual.id << std::endl;
+			}
 		}
 
 	}
@@ -233,7 +238,7 @@ bool Gedcom::gedcom::US08() {
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
 					if (boost::gregorian::from_uk_string(it_individual.birthDay) <= boost::gregorian::from_uk_string(it_family.marrDate)) {
 						result = false;
-						std::cout << "\nUS08 Fail (Birth before marriage of parents) for Individual with ID : " << it_individual.id << "!\n";
+						std::cout << "US08 Fail (Birth before marriage of parents) for Individual with ID : " << it_individual.id << std::endl;
 					}
 				}
 
@@ -242,7 +247,7 @@ bool Gedcom::gedcom::US08() {
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
 					if (boost::gregorian::from_uk_string(it_individual.birthDay) - boost::gregorian::from_uk_string(it_family.divorceDate) >= boost::gregorian::days(9*30)) {
 						result = false;
-						std::cout << "\nUS08 Fail (Birth 9 months beyond parents' divorce) for Individual with ID : " << it_individual.id << "!\n";
+						std::cout << "US08 Fail (Birth 9 months beyond parents' divorce) for Individual with ID : " << it_individual.id << std::endl;
 					}
 				}
 			}
