@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "Individual.h"
 
 namespace Family {
 class Family {
@@ -13,6 +14,10 @@ class Family {
 		std::string marriageDate;
 		std::string divorceDate;
 		std::vector<std::string> childrenIds;
+
+		Individual::Individual husband;
+		Individual::Individual wife;
+		std::vector<Individual::Individual> children;
 
 		/**** CONSTRUCTORS *****/
 		Family(std::string);

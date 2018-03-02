@@ -72,6 +72,9 @@ namespace Gedcom {
 		/* print family data */
 		void printFamilyTable();
 
+		/*Adds indivdual objects to family - should make it easier to compare individual dates with family dates (ex. marriage date and death date)*/
+		void addIndividualsToFamilies();
+
 		///\brief Include individual ages
 		/** Include person's current age when listing individuals **/
 		void US27();

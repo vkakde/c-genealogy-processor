@@ -17,5 +17,6 @@ namespace Individual {
 
 		/**** CONSTRUCTORS *****/
 		Individual(std::string);
+		Individual();
 	};
 }
