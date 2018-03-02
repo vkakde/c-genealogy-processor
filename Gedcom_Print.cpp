@@ -36,22 +36,22 @@ void Gedcom::gedcom::printFamilyTable() {
 	for (int i = 0; i < familyList.size(); ++i) {
 		// find husb name based on id
 		for (int j = 0; j < individualList.size(); j++) {
-			if (familyList[i].husb == individualList[j].id) {
+			if (familyList[i].husbandId == individualList[j].id) {
 				husb_name = individualList[j].name;
 				break;
 			}
 		}
 		// find wife name based on id
 		for (int k = 0; k < individualList.size(); k++) {
-			if (familyList[i].wife == individualList[k].id) {
+			if (familyList[i].wifeId == individualList[k].id) {
 				wife_name = individualList[k].name;
 				break;
 			}
 		}
 		std::cout << "     " << std::setw(10) << std::left << familyList[i].id
-			<< "||     " << std::setw(10) << std::left << familyList[i].husb
+			<< "||     " << std::setw(10) << std::left << familyList[i].husbandId
 			<< "||    " << std::setw(20) << std::left << husb_name
-			<< "||     " << std::setw(10) << std::left << familyList[i].wife
+			<< "||     " << std::setw(10) << std::left << familyList[i].wifeId
 			<< "||    " << std::setw(20) << std::left << wife_name << std::endl;
 	}
 	std::cout << "------------------------------------------------------------------------------------------------------" << std::endl;

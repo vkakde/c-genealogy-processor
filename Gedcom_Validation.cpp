@@ -74,8 +74,8 @@ bool Gedcom::gedcom::US01() {
 				result = false;
 			}
 		}
-		if (fam.marrDate.length() != 0) {
-			if (boost::gregorian::from_uk_string(fam.marrDate) >= today) {
+		if (fam.marriageDate.length() != 0) {
+			if (boost::gregorian::from_uk_string(fam.marriageDate) >= today) {
 				std::cout << "US01 Fail (Date before Current Date) for Family with ID : " << fam.id << std::endl;
 				result = false;
 			}
@@ -93,9 +93,9 @@ bool Gedcom::gedcom::US02() {
 		for (auto it_family : familyList) {
 			if (it_individual.famsId == it_family.id) {
 				///\remark Check date entry exists (individual may be un-married)
-				if(it_individual.birthDay.length()!=0 && it_family.marrDate.length()!=0){
+				if(it_individual.birthDay.length()!=0 && it_family.marriageDate.length()!=0){
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
-					if (boost::gregorian::from_uk_string(it_individual.birthDay) >= boost::gregorian::from_uk_string(it_family.marrDate)) {
+					if (boost::gregorian::from_uk_string(it_individual.birthDay) >= boost::gregorian::from_uk_string(it_family.marriageDate)) {
 						std::cout << "US02 Fail (Birth before marriage) for Individual with ID : " << it_individual.id << std::endl;
 						result = false;
 					}
@@ -148,8 +148,8 @@ bool Gedcom::gedcom::US04() {
 	bool result = true;
 	for (auto fam : familyList) {
 			//Check if dates exist
-		if (fam.marrDate.length() != 0 && fam.divorceDate.length() != 0) {
-			if (boost::gregorian::from_uk_string(fam.marrDate) >= boost::gregorian::from_uk_string(fam.divorceDate)) {
+		if (fam.marriageDate.length() != 0 && fam.divorceDate.length() != 0) {
+			if (boost::gregorian::from_uk_string(fam.marriageDate) >= boost::gregorian::from_uk_string(fam.divorceDate)) {
 				std::cout << "US04 Fail (Marriage before Divorce) for Family with ID : " << fam.id << std::endl;
 				result = false;
 			}
@@ -166,9 +166,9 @@ bool Gedcom::gedcom::US05() {
 		for (auto it_family : familyList) {
 			if (it_individual.famsId == it_family.id) {
 				///\remark Check date entry exists (individual may be un-married)
-				if (it_individual.deathDate.length() != 0 && it_family.marrDate.length() != 0) {
+				if (it_individual.deathDate.length() != 0 && it_family.marriageDate.length() != 0) {
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
-					if (boost::gregorian::from_uk_string(it_family.marrDate) > boost::gregorian::from_uk_string(it_individual.deathDate)) {
+					if (boost::gregorian::from_uk_string(it_family.marriageDate) > boost::gregorian::from_uk_string(it_individual.deathDate)) {
 						std::cout << "US05 Fail (Marriage before death) for Individual with ID : " << it_individual.id << std::endl;
 						result = false;
 					}
@@ -234,9 +234,9 @@ bool Gedcom::gedcom::US08() {
 		for (auto it_family : familyList) {
 			if (it_individual.famcId == it_family.id) {
 				///\remark Check date entry exists (parents' marriage date may be un-available)
-				if (it_individual.birthDay.length() != 0 && it_family.marrDate.length() != 0) {
+				if (it_individual.birthDay.length() != 0 && it_family.marriageDate.length() != 0) {
 					///\cite http://thispointer.com/how-to-convert-string-to-date-in-c-using-boost-library/
-					if (boost::gregorian::from_uk_string(it_individual.birthDay) <= boost::gregorian::from_uk_string(it_family.marrDate)) {
+					if (boost::gregorian::from_uk_string(it_individual.birthDay) <= boost::gregorian::from_uk_string(it_family.marriageDate)) {
 						result = false;
 						std::cout << "US08 Fail (Birth before marriage of parents) for Individual with ID : " << it_individual.id << std::endl;
 					}

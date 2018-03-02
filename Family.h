@@ -8,11 +8,11 @@ class Family {
 		/**** PUBLIC ATTRIBUTES	*****/
 	public:
 		std::string id;
-		std::string husb;
-		std::string wife;
-		std::string marrDate;
+		std::string husbandId;
+		std::string wifeId;
+		std::string marriageDate;
 		std::string divorceDate;
-		std::vector<std::string> children;
+		std::vector<std::string> childrenIds;
 
 		/**** CONSTRUCTORS *****/
 		Family(std::string);

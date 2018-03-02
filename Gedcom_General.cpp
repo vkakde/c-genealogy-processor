@@ -22,10 +22,10 @@ Gedcom::gedcom::gedcom() {
 	supportedTagsAndLevels.insert(std::make_pair("TRLR", 0));
 	supportedTagsAndLevels.insert(std::make_pair("NOTE", 0));
 
-	deathDate = false;
-	birthDate = false;
-	marrDate = false;
-	divDate = false;
+	deathDateFlag = false;
+	birthDateFlag = false;
+	marrDateFlag = false;
+	divDateFlag = false;
 }
 
 	// public functions
@@ -123,39 +123,39 @@ void Gedcom::gedcom::parseLine(std::string unparsedGedcomLine) {
 			parsedGedcomLine += lineElements[2];
 
 			if (lineElements[1] == "DEAT") {
-				deathDate = true;
+				deathDateFlag = true;
 			}
 			if (lineElements[1] == "BIRT") {
-				birthDate = true;
+				birthDateFlag = true;
 			}
 			if (lineElements[1] == "MARR") {
-				marrDate = true;
+				marrDateFlag = true;
 			}
 			if (lineElements[1] == "DIV") {
-				divDate = true;
+				divDateFlag = true;
 			}
 
 			//We know that there's a tag and a corresponding attribute, so add it:
 			if (lineElements[1] == "DATE") {
 				if (tagIsValid) {
-					if (deathDate) {
+					if (deathDateFlag) {
 						addAttribute("DEAT", lineElements[2]);
 					}
-					if (birthDate) {
+					if (birthDateFlag) {
 						addAttribute("BIRT", lineElements[2]);
 					}
-					if (marrDate) {
+					if (marrDateFlag) {
 						addAttribute("MARR", lineElements[2]);
 					}
-					if (divDate) {
+					if (divDateFlag) {
 						addAttribute("DIV", lineElements[2]);
 					}
 				}
 
-				deathDate = false;
-				birthDate = false;
-				marrDate = false;
-				divDate = false;
+				deathDateFlag = false;
+				birthDateFlag = false;
+				marrDateFlag = false;
+				divDateFlag = false;
 			}
 			else {
 				if (tagIsValid) {
@@ -167,16 +167,16 @@ void Gedcom::gedcom::parseLine(std::string unparsedGedcomLine) {
 		
 		else {
 			if (lineElements[1] == "DEAT") {
-				deathDate = true;
+				deathDateFlag = true;
 			}
 			if (lineElements[1] == "BIRT") {
-				birthDate = true;
+				birthDateFlag = true;
 			}
 			if (lineElements[1] == "MARR") {
-				marrDate = true;
+				marrDateFlag = true;
 			}
 			if (lineElements[1] == "DIV") {
-				divDate = true;
+				divDateFlag = true;
 			}
 		}
 		
@@ -261,16 +261,16 @@ void Gedcom::gedcom::addAttribute(std::string tag, std::string attribute) {
 			return;
 		}
 		if (tag == "HUSB") {
-			familyList[index].husb = attribute;
+			familyList[index].husbandId = attribute;
 		}
 		if (tag == "WIFE") {
-			familyList[index].wife = attribute;
+			familyList[index].wifeId = attribute;
 		}
 		if (tag == "CHIL") {
-			familyList[index].children.push_back(attribute);
+			familyList[index].childrenIds.push_back(attribute);
 		}
 		if (tag == "MARR") {
-			familyList[index].marrDate = attribute;
+			familyList[index].marriageDate = attribute;
 		}
 		if (tag == "DIV") {
 			familyList[index].divorceDate = attribute;

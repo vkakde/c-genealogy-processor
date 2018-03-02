@@ -28,10 +28,10 @@ namespace Gedcom {
 		std::vector<Individual::Individual> individualList = {};
 		std::string currentId;
 		bool isInd;
-		bool deathDate;
-		bool birthDate;
-		bool marrDate;
-		bool divDate;
+		bool deathDateFlag;
+		bool birthDateFlag;
+		bool marrDateFlag;
+		bool divDateFlag;
 
 		/*******************************************************/
 		/******************** CONSTRUCTORS *********************/
