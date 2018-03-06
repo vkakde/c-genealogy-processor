@@ -428,3 +428,21 @@ bool Gedcom::gedcom::US14() {
 	}
 	return result;
 }
+
+///\author vkakde
+bool Gedcom::gedcom::US16() {
+	bool result = true;
+	for (auto it_family : familyList) {
+		std::string father_lastName = it_family.husband.name.substr(it_family.husband.name.find(' '));
+
+		for (auto it_child : it_family.children) {
+			std::string child_lastName = it_child.name.substr(it_child.name.find(' '));
+
+			if (father_lastName.length()!=0 && child_lastName.length()!=0 && father_lastName != child_lastName) {
+				result = false;
+				std::cout << "US16 Fail (Same last name - all male members in family) for Individual with ID : " << it_child.id << std::endl;
+			}
+		}
+	}
+	return result;
+}
