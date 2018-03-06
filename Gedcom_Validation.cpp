@@ -377,7 +377,7 @@ bool Gedcom::gedcom::US13() {
 bool Gedcom::gedcom::US14() {
 	bool result = true;
 	int count = 0;
-	std::string fail_indiv_id;
+	//std::string fail_indiv_id;
 	std::vector<std::string> multsIds;
 	for (auto it_family : familyList) {
 		// no more than 5 siblings should be born at the same time
@@ -386,7 +386,7 @@ bool Gedcom::gedcom::US14() {
 				// find child
 				if (it_individual.id.compare(*i) == 0) {
 					// put children birthdays into vector
-					fail_indiv_id = *i;
+					//fail_indiv_id = *i;
 					multsIds.push_back(it_individual.birthDay);
 				}
 			}
@@ -396,7 +396,6 @@ bool Gedcom::gedcom::US14() {
 		}
 		if (count > 5) {
 			std::cout << "US14 Fail (Multiple births <= 5) for Family with ID : " << it_family.id << std::endl;
-			std::cout << "US14 Fail (Multiple births <= 5) for Individual with ID : " << fail_indiv_id << std::endl;
 			result = false;
 		}
 	}
