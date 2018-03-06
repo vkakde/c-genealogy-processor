@@ -39,11 +39,15 @@ namespace Gedcom {
 	public:
 		gedcom();
 
+		gedcom(std::string file);
+
 		/*******************************************************/
 		/************* PUBLIC FUNCTIONS - GENERAL **************/
 		/*******************************************************/
 		/* Read .ged file */
-		void readGedFile();									
+		void readGedFile();			
+
+		void readGedFile(std::string file);
 		
 		/* Print as read from .ged file */
 		void printGedcomData();

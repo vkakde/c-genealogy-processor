@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Gedcom.h"
 
 bool Gedcom::gedcom::isTagValid(std::string tagLevel, std::string tagName, int tagIndex) {
@@ -44,7 +45,6 @@ bool Gedcom::gedcom::isTagValid(std::string tagLevel, std::string tagName, int t
 	return false;
 }
 
-
 // Author: mjosephs
 bool Gedcom::gedcom::US01() {
 	bool result = true;
@@ -83,8 +83,6 @@ bool Gedcom::gedcom::US01() {
 	}
 	return result;
 }
-
-
 
 ///\author vkakde
 bool Gedcom::gedcom::US02() {
@@ -256,6 +254,32 @@ bool Gedcom::gedcom::US08() {
 	return result;
 }
 
+///\author vkakde
+bool Gedcom::gedcom::US09() {
+	bool result = true;
+	for (auto it_family : familyList) {
+		std::string father_deathDate = it_family.husband.deathDate;
+		std::string mother_deathDate = it_family.wife.deathDate;
+
+		for (auto it_child : it_family.children) {
+			std::string child_birthDate = it_child.birthDay;
+
+			// check if child born before mother's death
+			if (mother_deathDate.length() != 0 && child_birthDate.length() != 0 && boost::gregorian::from_uk_string(child_birthDate) > boost::gregorian::from_uk_string(mother_deathDate)) {
+				result = false;
+				std::cout << "US09 Fail (Birth before death of mother) for Individual with ID : " << it_child.id << std::endl;
+			}
+
+			// check if child born before 9 months after father's death
+			if (father_deathDate.length() != 0 && child_birthDate.length() != 0 && boost::gregorian::from_uk_string(child_birthDate) - boost::gregorian::from_uk_string(father_deathDate) >= boost::gregorian::days(9*30)) {
+				result = false;
+				std::cout << "US09 Fail (Birth before 9 months after of father) for Individual with ID : " << it_child.id << std::endl;
+			}
+		}
+	}
+	return result;
+}
+
 ///\author gmccorma
 bool Gedcom::gedcom::US10() {
 	// marriage should be at least 14 years after birth of both spouses (parents must be at least 14 years old).
@@ -397,6 +421,37 @@ bool Gedcom::gedcom::US14() {
 		if (count > 5) {
 			std::cout << "US14 Fail (Multiple births <= 5) for Family with ID : " << it_family.id << std::endl;
 			result = false;
+		}
+	}
+	return result;
+}
+
+///\author LouisRH
+bool Gedcom::gedcom::US15() {
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_family.childrenIds.size() > 15) {
+				result = false;
+			}
+		}
+	}
+	return result;
+}
+
+///\author vkakde
+bool Gedcom::gedcom::US16() {
+	bool result = true;
+	for (auto it_family : familyList) {
+		std::string father_lastName = it_family.husband.name.substr(it_family.husband.name.find(' '));
+
+		for (auto it_child : it_family.children) {
+			std::string child_lastName = it_child.name.substr(it_child.name.find(' '));
+
+			if (father_lastName.length()!=0 && child_lastName.length()!=0 && father_lastName != child_lastName) {
+				result = false;
+				std::cout << "US16 Fail (Same last name - all male members in family) for Individual with ID : " << it_child.id << std::endl;
+			}
 		}
 	}
 	return result;

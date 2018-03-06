@@ -1,4 +1,32 @@
+#include "stdafx.h"
 #include "Gedcom.h"
+
+Gedcom::gedcom::gedcom(std::string file) {
+	supportedTagsAndLevels.insert(std::make_pair("INDI", 0));
+	supportedTagsAndLevels.insert(std::make_pair("NAME", 1));
+	supportedTagsAndLevels.insert(std::make_pair("SEX", 1));
+	supportedTagsAndLevels.insert(std::make_pair("BIRT", 1));
+	supportedTagsAndLevels.insert(std::make_pair("DEAT", 1));
+	supportedTagsAndLevels.insert(std::make_pair("FAMC", 1));
+	supportedTagsAndLevels.insert(std::make_pair("FAMS", 1));
+	supportedTagsAndLevels.insert(std::make_pair("FAM", 0));
+	supportedTagsAndLevels.insert(std::make_pair("MARR", 1));
+	supportedTagsAndLevels.insert(std::make_pair("HUSB", 1));
+	supportedTagsAndLevels.insert(std::make_pair("WIFE", 1));
+	supportedTagsAndLevels.insert(std::make_pair("CHIL", 1));
+	supportedTagsAndLevels.insert(std::make_pair("DIV", 1));
+	supportedTagsAndLevels.insert(std::make_pair("DATE", 2));
+	supportedTagsAndLevels.insert(std::make_pair("HEAD", 0));
+	supportedTagsAndLevels.insert(std::make_pair("TRLR", 0));
+	supportedTagsAndLevels.insert(std::make_pair("NOTE", 0));
+
+	deathDateFlag = false;
+	birthDateFlag = false;
+	marrDateFlag = false;
+	divDateFlag = false;
+
+	readGedFile(file);
+}
 
 Gedcom::gedcom::gedcom() {
 	//supportedTagsAndLevels = { { "INDI",0 },{ "NAME",1 },{ "SEX",1 },{ "BIRT",1 },{ "DEAT",1 },{ "FAMC",1 },{ "FAMS",1 },{ "FAM",0 },{ "MARR",1 },{ "HUSB",1 },{ "WIFE",1 },
@@ -27,6 +55,24 @@ Gedcom::gedcom::gedcom() {
 	marrDateFlag = false;
 	divDateFlag = false;
 }
+
+void Gedcom::gedcom::readGedFile(std::string file) {
+	///cite https://stackoverflow.com/a/19922123
+	std::ifstream inFile;
+	inFile.open(file);
+	if (!inFile) {              // open file
+		std::cout << "\nFile open failed. Restart program and try again.\n";
+		std::cout << "Possible reasons for failure: \n\t1. Does the file exist?\n";
+		std::cout << "\t2. Did you forget to add the .ged extension?\n";
+		std::cout << "\t3. Mind the forward and reverse slashes depending on your OS.";
+		std::cout << "\tFor simplicity - place input ged in same folder as the source file.\n";
+	}
+	std::stringstream strStream;
+	strStream << inFile.rdbuf();        // read file
+	gedcomData = strStream.str();       // read file contents into string
+}
+
+
 
 	// public functions
 void Gedcom::gedcom::readGedFile() {
@@ -277,7 +323,6 @@ void Gedcom::gedcom::addAttribute(std::string tag, std::string attribute) {
 		}
 	}
 }
-
 
 void Gedcom::gedcom::addIndividualsToFamilies() {
 	for (int i = 0; i < familyList.size(); i++) {
