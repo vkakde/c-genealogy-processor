@@ -429,6 +429,19 @@ bool Gedcom::gedcom::US14() {
 	return result;
 }
 
+///\author LouisRH
+bool Gedcom::gedcom::US15() {
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_family.childrenIds.size() > 15) {
+				result = false;
+			}
+		}
+	}
+	return result;
+}
+
 ///\author vkakde
 bool Gedcom::gedcom::US16() {
 	bool result = true;
