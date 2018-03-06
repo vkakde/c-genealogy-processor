@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Gedcom.h"
 
 void Gedcom::gedcom::printGedcomData() {

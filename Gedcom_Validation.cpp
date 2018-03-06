@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Gedcom.h"
 
 bool Gedcom::gedcom::isTagValid(std::string tagLevel, std::string tagName, int tagIndex) {
@@ -44,7 +45,6 @@ bool Gedcom::gedcom::isTagValid(std::string tagLevel, std::string tagName, int t
 	return false;
 }
 
-
 // Author: mjosephs
 bool Gedcom::gedcom::US01() {
 	bool result = true;
@@ -83,8 +83,6 @@ bool Gedcom::gedcom::US01() {
 	}
 	return result;
 }
-
-
 
 ///\author vkakde
 bool Gedcom::gedcom::US02() {

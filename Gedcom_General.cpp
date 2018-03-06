@@ -56,9 +56,7 @@ Gedcom::gedcom::gedcom() {
 	divDateFlag = false;
 }
 
-
 void Gedcom::gedcom::readGedFile(std::string file) {
-
 	///cite https://stackoverflow.com/a/19922123
 	std::ifstream inFile;
 	inFile.open(file);
@@ -325,7 +323,6 @@ void Gedcom::gedcom::addAttribute(std::string tag, std::string attribute) {
 		}
 	}
 }
-
 
 void Gedcom::gedcom::addIndividualsToFamilies() {
 	for (int i = 0; i < familyList.size(); i++) {
