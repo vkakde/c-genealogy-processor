@@ -14,6 +14,7 @@ class Family {
 		std::string marriageDate;
 		std::string divorceDate;
 		std::vector<std::string> childrenIds;
+		std::string marriageEndDate;
 
 		Individual::Individual husband;
 		Individual::Individual wife;
