@@ -256,6 +256,26 @@ bool Gedcom::gedcom::US08() {
 	return result;
 }
 
+///\author gmccorma
+bool Gedcom::gedcom::US10() {
+	// marriage should be at least 14 years after birth of both spouses (parents must be at least 14 years old).
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_individual.famsId == it_family.id) {
+				if (it_individual.birthDay.length() != 0 && it_family.marriageDate.length() != 0) {
+					if (boost::gregorian::from_uk_string(it_family.marriageDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year()
+						< 14) {
+						result = false;
+						std::cout << "US10 Fail (Marriage after 14) for Individuals with IDs : " << it_family.husbandId << ", " << it_family.wifeId << std::endl;
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
 /** Marriage should not occur during marriage to another spouse **/
 bool Gedcom::gedcom::US11() {
 	bool result = true;
@@ -348,6 +368,36 @@ bool Gedcom::gedcom::US13() {
 					}
 				}
 			}
+		}
+	}
+	return result;
+}
+
+///\author gmccorma
+bool Gedcom::gedcom::US14() {
+	bool result = true;
+	int count = 0;
+	std::string fail_indiv_id;
+	std::vector<std::string> multsIds;
+	for (auto it_family : familyList) {
+		// no more than 5 siblings should be born at the same time
+		for (std::vector<std::string>::const_iterator i = it_family.childrenIds.begin(); i != it_family.childrenIds.end(); ++i) {
+			for (auto it_individual : individualList) {
+				// find child
+				if (it_individual.id.compare(*i) == 0) {
+					// put children birthdays into vector
+					fail_indiv_id = *i;
+					multsIds.push_back(it_individual.birthDay);
+				}
+			}
+		}
+		for (auto elem : multsIds) {
+			count = std::count(multsIds.begin(), multsIds.end(), elem);
+		}
+		if (count > 5) {
+			std::cout << "US14 Fail (Multiple births <= 5) for Family with ID : " << it_family.id << std::endl;
+			std::cout << "US14 Fail (Multiple births <= 5) for Individual with ID : " << fail_indiv_id << std::endl;
+			result = false;
 		}
 	}
 	return result;
