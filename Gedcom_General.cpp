@@ -326,22 +326,19 @@ void Gedcom::gedcom::addAttribute(std::string tag, std::string attribute) {
 	}
 }
 
+
 void Gedcom::gedcom::addIndividualsToFamilies() {
-	for (auto it_individual : individualList) {
-		for (auto it_family : familyList) {
-			if (it_individual.famsId == it_family.id) {
-				if (it_individual.id == it_family.husbandId) {
-					it_family.husband = it_individual;
-				}
-				else {
-					it_family.wife = it_individual;
-				}
+	for (int i = 0; i < familyList.size(); i++) {
+		for (auto it_individual : individualList) {
+			if (familyList[i].husbandId == it_individual.id) {
+				familyList[i].husband = it_individual;
 			}
-			else if (it_individual.famcId == it_family.id) {
-				for (auto child_id : it_family.childrenIds) {
-					if (child_id == it_individual.id) {
-						it_family.children.push_back(it_individual);
-					}
+			if (familyList[i].wifeId == it_individual.id) {
+				familyList[i].wife = it_individual;
+			}
+			for (auto child_id : familyList[i].childrenIds) {
+				if (child_id == it_individual.id) {
+					familyList[i].children.push_back(it_individual);
 				}
 			}
 		}

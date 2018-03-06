@@ -255,3 +255,150 @@ bool Gedcom::gedcom::US08() {
 	}
 	return result;
 }
+
+///\author gmccorma
+bool Gedcom::gedcom::US10() {
+	// marriage should be at least 14 years after birth of both spouses (parents must be at least 14 years old).
+	bool result = true;
+	for (auto it_individual : individualList) {
+		for (auto it_family : familyList) {
+			if (it_individual.famsId == it_family.id) {
+				if (it_individual.birthDay.length() != 0 && it_family.marriageDate.length() != 0) {
+					if (boost::gregorian::from_uk_string(it_family.marriageDate).year() - boost::gregorian::from_uk_string(it_individual.birthDay).year()
+						< 14) {
+						result = false;
+						std::cout << "US10 Fail (Marriage after 14) for Individuals with IDs : " << it_family.husbandId << ", " << it_family.wifeId << std::endl;
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
+/** Marriage should not occur during marriage to another spouse **/
+bool Gedcom::gedcom::US11() {
+	bool result = true;
+
+	//Sets the end date of the marriage as whichever of the following dates is the oldest: divorceDate, huband death date, wife death date
+	for (int i = 0; i < familyList.size(); i++) {
+		std::string oldestDate = "";
+		if (familyList[i].divorceDate == "") {
+			if (familyList[i].husband.deathDate != "" && familyList[i].wife.deathDate != "") {
+				if (boost::gregorian::from_uk_string(familyList[i].husband.deathDate) > boost::gregorian::from_uk_string(familyList[i].wife.deathDate)) {
+					oldestDate = familyList[i].wife.deathDate;
+				}
+				else {
+					oldestDate = familyList[i].husband.deathDate;
+				}
+			}
+			else if (familyList[i].husband.deathDate != "") {
+				oldestDate = familyList[i].husband.deathDate;
+			}
+			else if (familyList[i].wife.deathDate != "") {
+				oldestDate = familyList[i].wife.deathDate;
+			}
+		}
+		else {
+			oldestDate = familyList[i].divorceDate;
+		}
+		familyList[i].marriageEndDate = oldestDate;
+	}
+
+	for (int i = 0; i < familyList.size(); i++) {
+		Family::Family fam = familyList[i];
+		std::string marrDate = fam.marriageDate;
+		bool bigamyOccurs = false;
+
+		for (int j = i+1; j < familyList.size(); j++) {
+			Family::Family otherFam = familyList[j];
+			std::string otherMarrDate = fam.marriageDate;
+			if ((fam.wifeId == otherFam.wifeId) || (fam.husbandId == otherFam.husbandId)) {
+				//Now we know that a spouse in one family is also thespouse in another
+				//We have to check if: the marriage date of one is before the end date of another, or if both don't have end dates
+				if (fam.marriageEndDate != "" && otherFam.marriageDate != "") {
+					if (boost::gregorian::from_uk_string(fam.marriageEndDate) > boost::gregorian::from_uk_string(otherFam.marriageDate)) {
+						bigamyOccurs = true;
+					}
+				}
+				if (otherFam.marriageEndDate != "") {
+					if (boost::gregorian::from_uk_string(otherFam.marriageEndDate) > boost::gregorian::from_uk_string(fam.marriageDate)) {
+						bigamyOccurs = true;
+					}
+				}
+				if (fam.marriageEndDate == "" && otherFam.marriageEndDate == "") {
+					bigamyOccurs = true;
+				}
+
+			}
+			if (bigamyOccurs) {
+				std::cout << "US11 Fail (No Bigamy) for Families with IDs : " << fam.id  << " and " << otherFam.id << std::endl;
+				result = false;
+			}
+		}
+	}
+	return result;
+}
+
+/*Birth dates of siblings should be more than 8 months apart or less than 2 days apart*/
+bool Gedcom::gedcom::US13() {
+	bool result = true;
+	for (auto it_family : familyList) {
+		if (it_family.children.size() > 1) {
+			for (int i = 0; i < it_family.children.size(); i++) {
+				std::string childBirthDay = it_family.children[i].birthDay;
+				for (int j = i+1; j < it_family.children.size(); j++) {
+					std::string otherChildBirthDay = it_family.children[j].birthDay;
+					if (otherChildBirthDay != "" && childBirthDay != "") {
+						if (boost::gregorian::from_uk_string(childBirthDay).year() == boost::gregorian::from_uk_string(otherChildBirthDay).year()) {
+							if (boost::gregorian::from_uk_string(childBirthDay) > boost::gregorian::from_uk_string(otherChildBirthDay)) {
+								if ((boost::gregorian::from_uk_string(childBirthDay) - boost::gregorian::from_uk_string(otherChildBirthDay) < boost::gregorian::days(8 * 30)) && (boost::gregorian::from_uk_string(childBirthDay) - boost::gregorian::from_uk_string(otherChildBirthDay) > boost::gregorian::days(2))) {
+									std::cout << "US13 Fail (Sibiling Spacing) for children with IDs : " << it_family.children[i].id << " and " << it_family.children[j].id << std::endl;
+									result = false;
+								}
+							}
+							if (boost::gregorian::from_uk_string(childBirthDay) < boost::gregorian::from_uk_string(otherChildBirthDay)) {
+								if ((boost::gregorian::from_uk_string(otherChildBirthDay) - boost::gregorian::from_uk_string(childBirthDay) < boost::gregorian::days(8 * 30)) && (boost::gregorian::from_uk_string(otherChildBirthDay) - boost::gregorian::from_uk_string(childBirthDay) > boost::gregorian::days(2))) {
+									std::cout << "US13 Fail (Sibiling Spacing) for children with IDs : " << it_family.children[i].id << " and " << it_family.children[j].id << std::endl;
+									result = false;
+								}
+							}
+							
+						}
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
+///\author gmccorma
+bool Gedcom::gedcom::US14() {
+	bool result = true;
+	int count = 0;
+	std::string fail_indiv_id;
+	std::vector<std::string> multsIds;
+	for (auto it_family : familyList) {
+		// no more than 5 siblings should be born at the same time
+		for (std::vector<std::string>::const_iterator i = it_family.childrenIds.begin(); i != it_family.childrenIds.end(); ++i) {
+			for (auto it_individual : individualList) {
+				// find child
+				if (it_individual.id.compare(*i) == 0) {
+					// put children birthdays into vector
+					fail_indiv_id = *i;
+					multsIds.push_back(it_individual.birthDay);
+				}
+			}
+		}
+		for (auto elem : multsIds) {
+			count = std::count(multsIds.begin(), multsIds.end(), elem);
+		}
+		if (count > 5) {
+			std::cout << "US14 Fail (Multiple births <= 5) for Family with ID : " << it_family.id << std::endl;
+			std::cout << "US14 Fail (Multiple births <= 5) for Individual with ID : " << fail_indiv_id << std::endl;
+			result = false;
+		}
+	}
+	return result;
+}
