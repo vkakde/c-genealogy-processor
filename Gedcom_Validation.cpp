@@ -364,6 +364,64 @@ bool Gedcom::gedcom::US11() {
 	return result;
 }
 
+// Helper for US12 (remove eventually)
+int stringToInt(std::string str) {
+	int num;
+	std::stringstream stream(str);
+	stream >> num;
+	return num;
+}
+
+///\author LouisRH
+// This is a gross and outdated solution, and will be refactored before the end of sprint 3
+bool Gedcom::gedcom::US12() {
+	bool result = true;
+	std::string fatherID = "";
+	std::string motherID = "";
+	std::vector<std::string> childrenIDs = {};
+	std::string fatherBDay = "";
+	std::string motherBDay = "";
+	std::vector<std::string> childrenBDays = {};
+	int parentYear = 0;
+	int childYear = 0;
+
+	for (int i = 0; i < familyList.size(); i++) {
+		fatherID = familyList[i].husbandId;
+		motherID = familyList[i].wifeId;
+		childrenIDs = familyList[i].childrenIds;
+		for (int k = 0; k < individualList.size(); k++) {
+			if (fatherID == individualList[k].id) {
+				fatherBDay = individualList[k].birthDay;
+			}
+			if (motherID == individualList[k].id) {
+				motherBDay = individualList[k].birthDay;
+			}
+			for (int j = 0; j < childrenIDs.size(); j++) {
+				if (childrenIDs[j] == individualList[k].id) {
+					childrenBDays.push_back(individualList[k].birthDay);
+				}
+			}
+		}
+		parentYear = stringToInt(fatherBDay.substr(fatherBDay.length() - 4, 4));
+		for (int a = 0; a < childrenBDays.size(); a++) {
+			childYear = stringToInt(childrenBDays[a].substr(childrenBDays[a].length() - 4, 4));
+			if (parentYear - childYear > 80) {
+				std::cout << "US12 Fail (Parents not too old) for Family with ID : " << familyList[i].id << std::endl;
+				result = false;
+			}
+		}
+		parentYear = stringToInt(motherBDay.substr(motherBDay.length() - 4, 4));
+		for (int a = 0; a < childrenBDays.size(); a++) {
+			childYear = stringToInt(childrenBDays[a].substr(childrenBDays[a].length() - 4, 4));
+			if (parentYear - childYear > 80) {
+				std::cout << "US12 Fail (Parents not too old) for Family with ID : " << familyList[i].id << std::endl;
+				result = false;
+			}
+		}
+	}
+	return result;
+}
+
 /*Birth dates of siblings should be more than 8 months apart or less than 2 days apart*/
 bool Gedcom::gedcom::US13() {
 	bool result = true;
@@ -432,6 +490,7 @@ bool Gedcom::gedcom::US15() {
 	for (auto it_individual : individualList) {
 		for (auto it_family : familyList) {
 			if (it_family.childrenIds.size() > 15) {
+				std::cout << "US15 Fail (Fewer than 15 siblings) for Family with ID : " << it_family.id << std::endl;
 				result = false;
 			}
 		}
