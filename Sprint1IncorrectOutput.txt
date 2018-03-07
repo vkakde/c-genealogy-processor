@@ -1,29 +1,48 @@
+
 Individuals
-------------------------------------------
-      ID       ||         Name
-------------------------------------------
-     @I1@      ||    John /Smith/
-     @I2@      ||    Jack /Smith/
-     @I3@      ||    Catherine /Adams/
-     @I4@      ||    Samuel /Smith/
-     @I5@      ||    Karen /Stevens/
-     @I6@      ||    Mack /Smith/
-     @I7@      ||    Millie /Greene/
-     @I8@      ||    Malcolm /Joseph/
-     @I9@      ||    Erin /McCallister/
-     @I10@     ||    Emily /Smith/
-------------------------------------------
+-------------------------------------------------------------------------------------------------------
+      ID       ||            Name            ||   Gender   ||      Birthday      ||     Death Date
+-------------------------------------------------------------------------------------------------------
+     @I1@      ||    John /Smith/            ||     M      ||     18 MAY 1990    ||
+     @I2@      ||    Jack /Smith/            ||     M      ||     8 JUN 1964     ||
+     @I3@      ||    Catherine /Adams/       ||     F      ||     23 OCT 1968    ||
+     @I4@      ||    Samuel /Smith/          ||     M      ||     16 JUN 1634    ||     2 MAY 1998
+     @I5@      ||    Karen /Stevens/         ||     F      ||     10 MAR 1940    ||     18 AUG 1939
+     @I6@      ||    Mack /Smith/            ||     M      ||     12 MAR 2961    ||     18 AUG 1839
+     @I7@      ||    Millie /Greene/         ||     F      ||     4 JAN 1966     ||
+     @I8@      ||    Malcolm /Joseph/        ||     M      ||     10 DEC 1952    ||     5 MAY 1988
+     @I9@      ||    Erin /McCallister/      ||     F      ||     7 SEP 1970     ||     5 MAY 1988
+     @I10@     ||    Emily /Smith/           ||     F      ||     3 JAN 2091     ||
+     @I11@     ||    Jim /Smith/             ||            ||     3 MAY 1990     ||
+     @I12@     ||    Joe1 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I13@     ||    Joe2 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I14@     ||    Joe3 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I15@     ||    Joe4 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I16@     ||    Joe5 /NotJoseph/        ||     M      ||     2 FEB 1990     ||
+     @I17@     ||    Joe6 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I18@     ||    Joe7 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I19@     ||    Joe8 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I20@     ||    Joe9 /Joseph/           ||     M      ||     2 FEB 1990     ||
+     @I21@     ||    Joe10 /Joseph/          ||     M      ||     2 FEB 1990     ||
+     @I22@     ||    Joe11 /Joseph/          ||     M      ||     2 FEB 1990     ||
+     @I23@     ||    Joe12 /Joseph/          ||     M      ||     2 FEB 1990     ||
+     @I24@     ||    Joe13 /Joseph/          ||     M      ||     2 FEB 1990     ||
+     @I25@     ||    Joe14 /Joseph/          ||     M      ||     2 FEB 1990     ||
+     @I26@     ||    Joe15 /Joseph/          ||     M      ||     2 FEB 1990     ||
+     @I27@     ||    Joe16 /Joseph/          ||     M      ||     2 FEB 1990     ||
+-------------------------------------------------------------------------------------------------------
 
 Families
-------------------------------------------------------------------------------------------------------
-      ID       ||   Husband ID  ||      Husband Name      ||    Wife ID    ||       Wife Name
-------------------------------------------------------------------------------------------------------
-     @F1@      ||     @I2@      ||    Jack /Smith/        ||     @I3@      ||    Catherine /Adams/
-     @F2@      ||     @I2@      ||    Jack /Smith/        ||     @I9@      ||    Erin /McCallister/
-     @F3@      ||     @I4@      ||    Samuel /Smith/      ||     @I5@      ||    Karen /Stevens/
-     @F4@      ||     @I6@      ||    Mack /Smith/        ||     @I7@      ||    Millie /Greene/
-     @F5@      ||     @I8@      ||    Malcolm /Joseph/    ||     @I7@      ||    Millie /Greene/
-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      ID       ||   Husband ID  ||      Husband Name      ||    Wife ID    ||       Wife Name        ||     Marriage Date      ||      Divorce Date      ||     Children IDs
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     @F1@      ||     @I2@      ||    Jack /Smith/        ||     @I3@      ||    Catherine /Adams/   ||    25 JUN 1987         ||                        ||    @I1@, @I11@
+     @F2@      ||     @I2@      ||    Jack /Smith/        ||     @I9@      ||    Erin /McCallister/  ||    3 MAR 1985          ||                        ||    @I10@
+     @F3@      ||     @I4@      ||    Samuel /Smith/      ||     @I5@      ||    Karen /Stevens/     ||    2 MAR 1958          ||                        ||    @I2@, @I6@
+     @F4@      ||     @I6@      ||    Mack /Smith/        ||     @I7@      ||    Millie /Greene/     ||    6 AUG 1988          ||    8 NOV 1902          ||
+     @F5@      ||     @I8@      ||    Malcolm /Joseph/    ||     @I7@      ||    Millie /Greene/     ||                        ||                        ||
+     @F6@      ||     @I8@      ||    Malcolm /Joseph/    ||               ||                        ||                        ||                        ||    @I12@, @I13@, @I14@, @I15@, @I16@, @I17@, @I18@, @I19@, @I20@, @I21@, @I22@, @I23@, @I24@, @I25@, @I26@, @I27@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 US01 Fail (Date before Current Date) for Individual with ID : @I6@
 US01 Fail (Date before Current Date) for Individual with ID : @I10@
@@ -35,5 +54,59 @@ US05 Fail (Marriage before death) for Individual with ID : @I5@
 US05 Fail (Marriage before death) for Individual with ID : @I6@
 US06 Fail (Divorce before death) for Individual with ID : @I6@
 US07 Fail (Less than 150 yeards old) for Individual with ID : @I4@
-US08 Fail (Birth before marriage of parents) for Individual with ID : @I1@
+US09 Fail (Birth before death of mother) for Individual with ID : @I10@
+US09 Fail (Birth before death of mother) for Individual with ID : @I2@
+US09 Fail (Birth before death of mother) for Individual with ID : @I6@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I6@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I12@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I13@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I14@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I15@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I16@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I17@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I18@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I19@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I20@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I21@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I22@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I23@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I24@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I25@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I26@
+US09 Fail (Birth before 9 months after of father) for Individual with ID : @I27@
+US10 Fail (Marriage after 14) for Individuals with IDs : @I6@, @I7@
+US12 Fail (Parents not too old) for Family with ID : @F4@
+US12 Fail (Parents not too old) for Family with ID : @F4@
+US12 Fail (Parents not too old) for Family with ID : @F4@
+US12 Fail (Parents not too old) for Family with ID : @F4@
+US13 Fail (Sibiling Spacing) for children with IDs : @I1@ and @I11@
+US14 Fail (Multiple births <= 5) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US15 Fail (Fewer than 15 siblings) for Family with ID : @F6@
+US16 Fail (Same last name - all male members in family) for Individual with ID : @I16@
 Some errors found in input file. Please check error messages for details.
