@@ -332,9 +332,9 @@ bool Gedcom::gedcom::US11() {
 	for (int i = 0; i < familyList.size(); i++) {
 		Family::Family fam = familyList[i];
 		std::string marrDate = fam.marriageDate;
-		bool bigamyOccurs = false;
 
 		for (int j = i+1; j < familyList.size(); j++) {
+			bool bigamyOccurs = false;
 			Family::Family otherFam = familyList[j];
 			std::string otherMarrDate = fam.marriageDate;
 			if ((fam.wifeId == otherFam.wifeId) || (fam.husbandId == otherFam.husbandId)) {
