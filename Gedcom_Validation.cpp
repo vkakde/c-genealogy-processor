@@ -336,7 +336,7 @@ bool Gedcom::gedcom::US11() {
 		for (int j = i+1; j < familyList.size(); j++) {
 			bool bigamyOccurs = false;
 			Family::Family otherFam = familyList[j];
-			std::string otherMarrDate = fam.marriageDate;
+			std::string otherMarrDate = otherFam.marriageDate;
 			if ((fam.wifeId == otherFam.wifeId) || (fam.husbandId == otherFam.husbandId)) {
 				//Now we know that a spouse in one family is also thespouse in another
 				//We have to check if: the marriage date of one is before the end date of another, or if both don't have end dates
@@ -344,12 +344,14 @@ bool Gedcom::gedcom::US11() {
 					if (boost::gregorian::from_uk_string(fam.marriageEndDate) > boost::gregorian::from_uk_string(otherFam.marriageDate)) {
 						bigamyOccurs = true;
 					}
+					
 				}
-				if (otherFam.marriageEndDate != "") {
+				if (otherFam.marriageEndDate != "" && fam.marriageDate != "") {
 					if (boost::gregorian::from_uk_string(otherFam.marriageEndDate) > boost::gregorian::from_uk_string(fam.marriageDate)) {
 						bigamyOccurs = true;
 					}
 				}
+
 				if (fam.marriageEndDate == "" && otherFam.marriageEndDate == "") {
 					bigamyOccurs = true;
 				}
