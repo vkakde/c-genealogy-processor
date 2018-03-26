@@ -375,7 +375,7 @@ int stringToInt(std::string str) {
 }
 
 ///\author LouisRH
-// This is a gross and outdated solution, and will be refactored before the end of sprint 3
+// This is a gross and outdated solution, and will be refactored before the end of sprint 4
 bool Gedcom::gedcom::US12() {
 	bool result = true;
 	std::string fatherID = "";
@@ -388,36 +388,38 @@ bool Gedcom::gedcom::US12() {
 	int childYear = 0;
 
 	for (int i = 0; i < familyList.size(); i++) {
-		fatherID = familyList[i].husbandId;
-		motherID = familyList[i].wifeId;
-		childrenIDs = familyList[i].childrenIds;
-		for (int k = 0; k < individualList.size(); k++) {
-			if (fatherID == individualList[k].id) {
-				fatherBDay = individualList[k].birthDay;
-			}
-			if (motherID == individualList[k].id) {
-				motherBDay = individualList[k].birthDay;
-			}
-			for (int j = 0; j < childrenIDs.size(); j++) {
-				if (childrenIDs[j] == individualList[k].id) {
-					childrenBDays.push_back(individualList[k].birthDay);
+		if (familyList[i].childrenIds.size() > 0) {
+			fatherID = familyList[i].husbandId;
+			motherID = familyList[i].wifeId;
+			childrenIDs = familyList[i].childrenIds;
+			for (int k = 0; k < individualList.size(); k++) {
+				if (fatherID == individualList[k].id) {
+					fatherBDay = individualList[k].birthDay;
+				}
+				if (motherID == individualList[k].id) {
+					motherBDay = individualList[k].birthDay;
+				}
+				for (int j = 0; j < childrenIDs.size(); j++) {
+					if (childrenIDs[j] == individualList[k].id) {
+						childrenBDays.push_back(individualList[k].birthDay);
+					}
 				}
 			}
-		}
-		parentYear = stringToInt(fatherBDay.substr(fatherBDay.length() - 4, 4));
-		for (int a = 0; a < childrenBDays.size(); a++) {
-			childYear = stringToInt(childrenBDays[a].substr(childrenBDays[a].length() - 4, 4));
-			if (parentYear - childYear > 80) {
-				std::cout << "US12 Fail (Parents not too old) for Family with ID : " << familyList[i].id << std::endl;
-				result = false;
+			parentYear = stringToInt(fatherBDay.substr(fatherBDay.length() - 4, 4));
+			for (int a = 0; a < childrenBDays.size(); a++) {
+				childYear = stringToInt(childrenBDays[a].substr(childrenBDays[a].length() - 4, 4));
+				if (parentYear - childYear > 80) {
+					std::cout << "US12 Fail (Parents not too old) for Family with ID : " << familyList[i].id << std::endl;
+					result = false;
+				}
 			}
-		}
-		parentYear = stringToInt(motherBDay.substr(motherBDay.length() - 4, 4));
-		for (int a = 0; a < childrenBDays.size(); a++) {
-			childYear = stringToInt(childrenBDays[a].substr(childrenBDays[a].length() - 4, 4));
-			if (parentYear - childYear > 80) {
-				std::cout << "US12 Fail (Parents not too old) for Family with ID : " << familyList[i].id << std::endl;
-				result = false;
+			parentYear = stringToInt(motherBDay.substr(motherBDay.length() - 4, 4));
+			for (int a = 0; a < childrenBDays.size(); a++) {
+				childYear = stringToInt(childrenBDays[a].substr(childrenBDays[a].length() - 4, 4));
+				if (parentYear - childYear > 80) {
+					std::cout << "US12 Fail (Parents not too old) for Family with ID : " << familyList[i].id << std::endl;
+					result = false;
+				}
 			}
 		}
 	}
@@ -515,5 +517,97 @@ bool Gedcom::gedcom::US16() {
 			}
 		}
 	}
+	return result;
+}
+
+// Helper for US19
+std::vector<Family::Family> findFamilies(std::vector<Family::Family> familyList, std::string indiID) {
+	std::vector<Family::Family> memberList = {};
+	for (auto it_family : familyList) {
+		for (auto child : it_family.children) {
+			if (child.id == indiID) {
+				memberList.push_back(it_family);
+			}
+		}
+	}
+	return memberList;
+}
+
+///\author LouisRH
+// Time and space complexity are atrocious, refactor later
+bool Gedcom::gedcom::US19() {
+	bool result = true;
+	std::vector<std::string> husbGrandfather = {};
+	std::vector<std::string> husbGrandmother = {};
+	std::vector<std::string> wifeGrandfather = {};
+	std::vector<std::string> wifeGrandmother = {};
+	std::vector<Family::Family> memberList = {};
+	std::vector<Family::Family> memberListFather = {};
+	std::vector<Family::Family> memberListMother = {};
+	// For each family
+	for (auto it_family : familyList) {
+		// Husb: For each family in which the husband is a child
+		memberList = findFamilies(familyList, it_family.husbandId);
+		// For each of those families
+		for (auto it_family2 : memberList) {
+			// Find all families where the mother and father are children (separately)
+			memberListFather = findFamilies(familyList, it_family2.husbandId);
+			memberListMother = findFamilies(familyList, it_family2.wifeId);
+			// For each family where the father is a child
+			for (auto it_family3 : memberListFather) {
+				// Record ID of parents
+				husbGrandfather.push_back(it_family3.husbandId);
+				husbGrandmother.push_back(it_family3.wifeId);
+			}
+			// For each family where the mother is a child
+			for (auto it_family3 : memberListMother) {
+				// Record ID of parents
+				husbGrandfather.push_back(it_family3.husbandId);
+				husbGrandmother.push_back(it_family3.wifeId);
+			}
+		}
+
+		// Wife: For each family in which the wife is a child
+		memberList = findFamilies(familyList, it_family.wifeId);
+		// For each of those families
+		for (auto it_family2 : memberList) {
+			// Find all families where the mother and father are children (separately)
+			memberListFather = findFamilies(familyList, it_family2.husbandId);
+			memberListMother = findFamilies(familyList, it_family2.wifeId);
+			// For each family where the father is a child
+			for (auto it_family3 : memberListFather) {
+				// Record ID of parents
+				wifeGrandfather.push_back(it_family3.husbandId);
+				wifeGrandmother.push_back(it_family3.wifeId);
+			}
+			// For each family where the mother is a child
+			for (auto it_family3 : memberListMother) {
+				// Record ID of parents
+				wifeGrandfather.push_back(it_family3.husbandId);
+				wifeGrandmother.push_back(it_family3.wifeId);
+			}
+		}
+
+		for (auto it_ID : husbGrandfather) {
+			for (auto it_ID2 : wifeGrandfather) {
+				if (it_ID == it_ID2) {
+					result = false;
+					std::cout << "US19 Fail (First cousins should not marry) for Individuals with ID : " << it_family.husbandId << " " << it_family.wifeId << std::endl;
+					return result;
+				}
+			}
+		}
+
+		for (auto it_ID : husbGrandmother) {
+			for (auto it_ID2 : wifeGrandmother) {
+				if (it_ID == it_ID2) {
+					result = false;
+					std::cout << "US19 Fail (First cousins should not marry) for Individuals with ID : " << it_family.husbandId << " " << it_family.wifeId << std::endl;
+					return result;
+				}
+			}
+		}
+	}
+
 	return result;
 }
