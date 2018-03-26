@@ -520,7 +520,7 @@ bool Gedcom::gedcom::US16() {
 	return result;
 }
 
-// Helper for US19
+// Helper for US17 and US19
 std::vector<Family::Family> findFamilies(std::vector<Family::Family> familyList, std::string indiID) {
 	std::vector<Family::Family> memberList = {};
 	for (auto it_family : familyList) {
@@ -531,6 +531,44 @@ std::vector<Family::Family> findFamilies(std::vector<Family::Family> familyList,
 		}
 	}
 	return memberList;
+}
+
+// Helper for US17
+bool checkAncestors(std::vector<Family::Family> familyList, std::string originalID, std::string ancestorID) {
+	std::vector<Family::Family> memberList = findFamilies(familyList, originalID);
+	if (memberList.size() == 0) {
+		return true;
+	}
+
+	for (auto it_family : memberList) {
+		if (ancestorID == it_family.husbandId || ancestorID == it_family.wifeId) {
+			return false;
+		} else {
+			if (!checkAncestors(familyList, it_family.husbandId, ancestorID) ||
+				!checkAncestors(familyList, it_family.wifeId, ancestorID)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	return true;
+}
+
+///\author LouisRH
+bool Gedcom::gedcom::US17() {
+	bool result = true;
+	for (auto it_family : familyList) {
+		if (!checkAncestors(familyList, it_family.husbandId, it_family.wifeId) ||
+			!checkAncestors(familyList, it_family.wifeId, it_family.husbandId)) {
+			result = false;
+			std::cout << "US17 Fail (No marriages to descendants) for Individuals with ID : " << it_family.husbandId << " " << it_family.wifeId << std::endl;
+			return result;
+		}
+	}
+
+	return result;
 }
 
 ///\author LouisRH
