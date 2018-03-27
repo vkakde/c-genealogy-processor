@@ -718,3 +718,17 @@ bool Gedcom::gedcom::US23() {
 	}
 	return result;
 }
+
+///\author vkakde
+///\remark Since 'GIVN' and 'MARNM' are not among supported tags for our project, we eliminate the concept of given and marriage names.
+bool Gedcom::gedcom::US24() {
+	bool result = true;
+	for (int i = 0; i < familyList.size(); i++) {
+		for (int j = 0; j < familyList.size(); j++) {
+			if (i != j && familyList[i].husband.name == familyList[j].husband.name && familyList[i].wife.name == familyList[j].wife.name && familyList[i].marriageDate == familyList[j].marriageDate) {
+				std::cout << "US24 Fail (More than 1 family with same spouse names and DoM) for Families with ID : " << familyList[i].id << " and " << familyList[j].id << std::endl;
+			}
+		}
+	}
+	return result;
+}
