@@ -649,3 +649,59 @@ bool Gedcom::gedcom::US19() {
 
 	return result;
 }
+
+///\author mjosephs
+bool Gedcom::gedcom::US21() {
+	bool result = true;
+
+	for (auto it_family : familyList) {
+		if (it_family.husband.sex == "F") {
+			std::cout << "US21 Fail (Correct gender for role) for Individual with ID : " << it_family.husband.id << std::endl;
+			result = false;
+		}
+		if (it_family.wife.sex == "M") {
+			std::cout << "US21 Fail (Correct gender for role) for Individual with ID : " << it_family.husband.id << std::endl;
+			result = false;
+		}
+	}
+	return result;
+}
+
+///\author mjosephs
+bool Gedcom::gedcom::US22() {
+	bool result = true;
+	std::vector<std::string> famIds;
+	std::vector<std::string> indiIds;
+
+	for (auto it_family : familyList) {
+		bool isRepeat = false;
+		for (auto famId : famIds) {
+			if (famId == it_family.id) {
+				isRepeat = true;
+				result = false;
+				std::cout << "US22 Fail (Unique IDs) for Family with ID : " << it_family.id << std::endl;
+			}
+		}
+
+		if (!isRepeat) {
+			famIds.push_back(it_family.id);
+		}
+	}
+
+	for (auto it_individual : individualList) {
+		bool isRepeat = false;
+		for (auto indiId : indiIds) {
+			if (indiId == it_individual.id) {
+				isRepeat = true;
+				result = false;
+				std::cout << "US22 Fail (Unique IDs) for Individual with ID : " << it_individual.id << std::endl;
+			}
+		}
+
+		if (!isRepeat) {
+			indiIds.push_back(it_individual.id);
+		}
+	}
+
+	return result;
+}
