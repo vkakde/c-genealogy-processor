@@ -571,6 +571,22 @@ bool Gedcom::gedcom::US17() {
 	return result;
 }
 
+///\ author gmccorma
+// Siblings should not marry one another
+bool Gedcom::gedcom::US18() {
+	bool result = true;
+	for (auto it_family : familyList) {
+		for (auto it_individual : individualList) {
+			if (it_family.husband.famsId == it_family.wife.famsId && it_family.husband.famcId == it_family.wife.famcId) {
+				result = false;
+				std::cout << "US18 Fail (Siblings should not marry) for Individuals with ID : " << it_family.husbandId << " " << it_family.wifeId << std::endl;
+				return result;
+			}
+		}
+	}
+	return result;
+}
+
 ///\author LouisRH
 // Time and space complexity are atrocious, refactor later
 bool Gedcom::gedcom::US19() {
@@ -647,6 +663,35 @@ bool Gedcom::gedcom::US19() {
 		}
 	}
 
+	return result;
+}
+
+///\ author gmccorma
+// Aunts and uncles should not marry their nieces or nephews
+bool Gedcom::gedcom::US20() {
+	bool result = true;
+	std::string id;
+	std::string ind_id;
+	for (auto it_family : familyList) {
+		// go through parent's family
+		for (auto it_individual : individualList) {
+			id = it_individual.famsId;
+		}
+		// go through child's family
+		for (std::vector<std::string>::const_iterator i = it_family.childrenIds.begin(); i != it_family.childrenIds.end(); ++i) {
+			for (auto it_individual : individualList) {
+				// find child
+				if (it_individual.id.compare(*i) == 0) {
+					// if child spouse id 
+					if (it_individual.famsId == id) {
+						result = false;
+						std::cout << "US20 Fail (Aunts and uncles should not marry their nieces or nephews) for Family with ID : " << id << std::endl;
+						return result;
+					}
+				}
+			}
+		}
+	}
 	return result;
 }
 
