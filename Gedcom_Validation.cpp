@@ -705,3 +705,16 @@ bool Gedcom::gedcom::US22() {
 
 	return result;
 }
+
+///\author vkakde
+bool Gedcom::gedcom::US23() {
+	bool result = true;
+	for (int i = 0; i < individualList.size(); i++) {
+		for (int j = 0; j < individualList.size(); j++) {
+			if (i != j && individualList[i].name == individualList[j].name && individualList[i].birthDay == individualList[j].birthDay) {
+				std::cout << "US23 Fail (More than 1 individual with same name and DoB) for Individuals with ID : " << individualList[i].id << " and " << individualList[j].id << std::endl;
+			}
+		}
+	}
+	return result;
+}
