@@ -491,14 +491,12 @@ bool Gedcom::gedcom::US14() {
 ///\author LouisRH
 bool Gedcom::gedcom::US15() {
 	bool result = true;
-	for (auto it_individual : individualList) {
 		for (auto it_family : familyList) {
 			if (it_family.childrenIds.size() > 15) {
 				std::cout << "US15 Fail (Fewer than 15 siblings) for Family with ID : " << it_family.id << std::endl;
 				result = false;
 			}
 		}
-	}
 	return result;
 }
 
