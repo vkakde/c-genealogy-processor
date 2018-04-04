@@ -775,3 +775,5 @@ bool Gedcom::gedcom::US24() {
 	}
 	return result;
 }
+
+

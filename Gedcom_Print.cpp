@@ -62,3 +62,40 @@ void Gedcom::gedcom::printFamilyTable() {
 	std::cout << "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 	std::cout << std::endl;
 }
+
+///\author gmccorma
+// List siblings in families by decreasing age, i.e. oldest siblings first
+void Gedcom::gedcom::US28() {
+	//const int count = 0;
+	std::vector<std::string> childIds;
+	
+	for (auto it_family : familyList) {
+		// get dates of birth of each child
+		//std::cout << "Siblings in family " << it_family.id << ": " << it_family.childrenIds << std::endl;
+		for (std::vector<std::string>::const_iterator i = it_family.childrenIds.begin(); i != it_family.childrenIds.end(); ++i) {
+			for (auto it_individual : individualList) {
+				// find child, put into vector list
+				if (it_individual.id.compare(*i) == 0) {
+					childIds.push_back(it_individual.birthDay);
+					// count number of children in family
+					for (auto elem : it_family.childrenIds) {
+						const int count = std::count(it_family.childrenIds.begin(), it_family.childrenIds.end(), elem);
+					}
+					//std::string arr[count] = {};
+					std::cout << "Siblings in family " << it_family.id << ": " << it_individual.id << std::endl;
+				}
+			}
+		}
+
+	}
+}
+
+///\author gmccorma
+// List all deceased individuals in a GEDCOM file
+void Gedcom::gedcom::US29() {
+	for (auto it_individual : individualList) {
+		if (it_individual.deathDate != "") {
+			std::cout << "Deceased individual with ID: " << it_individual.id << std::endl;
+		}
+	}
+}
