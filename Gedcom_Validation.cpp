@@ -776,4 +776,21 @@ bool Gedcom::gedcom::US24() {
 	return result;
 }
 
+///\author mjosephs
+//No more than one child with the same name and birth date should appear in a family
+bool Gedcom::gedcom::US25() {
+	bool result = true;
+	for (auto it_family : familyList) {
+		std::vector<std::string> childrenNames = {};
+		for (auto child : it_family.children) {
+			childrenNames.push_back(child.name);
+		}
 
+		std::set<std::string> uniqueChildrenList(childrenNames.begin(), childrenNames.end());
+		if (childrenNames.size() != uniqueChildrenList.size()) {
+			std::cout << "US25 Fail (More than one child with the same name) for Family with ID : " << it_family.id << std::endl;
+		}
+	}
+
+	return result;
+}
