@@ -112,3 +112,44 @@ void Gedcom::gedcom::US29() {
 	}
 }
 
+///\author LouisRH
+// List living married
+void Gedcom::gedcom::US30() {
+	for (auto it_family : familyList) {
+		if (it_family.divorceDate == "" && it_family.husband.deathDate == "" && it_family.wife.deathDate == "") {
+			std::cout << "Living married individual with ID: " << it_family.husbandId << std::endl;
+			std::cout << "Living married individual with ID: " << it_family.wifeId << std::endl;
+		}
+	}
+}
+
+// Helper for US31
+bool findFamily(std::vector<Family::Family> familyList, std::string id) {
+	for (auto it_family : familyList) {
+		if (it_family.husbandId == id || it_family.wifeId == id) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+// Helper for US31
+int stringToIntNew(std::string str) {
+	int num;
+	std::stringstream stream(str);
+	stream >> num;
+	return num;
+}
+
+///\author LouisRH
+// List living single
+void Gedcom::gedcom::US31() {
+	for (auto it_individual : individualList) {
+		if (it_individual.deathDate == "" && stringToIntNew(getAge(it_individual.birthDay)) >= 30) {
+			if (findFamily(familyList, it_individual.id)) {
+				std::cout << "Living single individual over 30 with ID: " << it_individual.id << std::endl;
+			}
+		}
+	}
+}
