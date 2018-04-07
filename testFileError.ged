@@ -166,8 +166,8 @@
 2 DATE 2 FEB 1990
 1 FAMC @F10@
 0 @I16@ INDI
-1 NAME Joe3 /Joseph/
-2 GIVN Joe3
+1 NAME Joe2 /Joseph/
+2 GIVN Joe2
 2 SURN Joseph
 2 _MARNM Joseph
 1 SEX M

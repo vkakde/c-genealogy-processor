@@ -11,21 +11,33 @@ void Gedcom::gedcom::printSupportedTags() {
 	}
 }
 
+//\author mjosephs
+//For US 27 - Printing the age of each individual
+std::string getAge(std::string birthday) {
+	boost::gregorian::date today = boost::gregorian::day_clock::local_day();
+	boost::gregorian::date birth = boost::gregorian::from_uk_string(birthday);
+	boost::gregorian::date_duration age = today - birth;
+	std::string age_str = std::to_string(age.days()/365);
+
+	return age_str;
+}
+
 void Gedcom::gedcom::printIndividualTable() {
 	std::cout << "\n" << "Individuals" << std::endl;
 
-	std::cout << "-------------------------------------------------------------------------------------------------------" << std::endl;
-	std::cout << "      ID       |" << "|            Name            |" << "|   Gender   |" << "|      Birthday      |" << "|     Death Date    " << std::endl;
-	std::cout << "-------------------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << "----------------------------------------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << "      ID       |" << "|            Name            |" << "|   Gender   |" << "|      Birthday      |" << "|     Death Date     |" << "|     Age (US 27)    " <<std::endl;
+	std::cout << "----------------------------------------------------------------------------------------------------------------------------" << std::endl;
 
 	for (int i = 0; i < individualList.size(); ++i) {
 		std::cout << "     " << std::setw(10) << std::left << individualList[i].id 
 			<< "||    " << std::setw(20) << std::left << individualList[i].name << "    "
 			<< "||     " << std::setw(5) << std::left << individualList[i].sex << "  "
 			<< "||     " << std::setw(15) << std::left << individualList[i].birthDay
-			<< "||     " << std::setw(15) << std::left << individualList[i].deathDate << std::endl;
+			<< "||     " << std::setw(15) << std::left << individualList[i].deathDate 
+			<< "||     " << std::setw(15) << std::left << getAge(individualList[i].birthDay) << std::endl;
 	}
-	std::cout << "-------------------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << "----------------------------------------------------------------------------------------------------------------------------" << std::endl;
 }
 
 void Gedcom::gedcom::printFamilyTable() {
@@ -99,3 +111,4 @@ void Gedcom::gedcom::US29() {
 		}
 	}
 }
+
