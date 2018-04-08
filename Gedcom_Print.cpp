@@ -153,3 +153,20 @@ void Gedcom::gedcom::US31() {
 		}
 	}
 }
+
+///\author vkakde
+///\brief Multiple births
+void Gedcom::gedcom::US32() {
+	std::set<int> multipleBirthIndividuals;
+	for (int i = 0; i < familyList.size(); i++) {
+		if (familyList[i].children.size() != 0) {
+			for (int j = 0; j < familyList[i].children.size(); j++) {
+				for (int k = 0; k < familyList[i].children.size(); k++) {
+					if (j != k && familyList[i].children[j].birthDay == familyList[i].children[k].birthDay) {
+						std::cout << "\nMultiple births in family " << familyList[i].id << " for children " << individualList[j].id << " and " << individualList[k].id;
+					}
+				}
+			}
+		}
+	}
+}
