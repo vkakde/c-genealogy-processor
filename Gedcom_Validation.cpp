@@ -794,3 +794,88 @@ bool Gedcom::gedcom::US25() {
 
 	return result;
 }
+
+///\author vkakde
+bool Gedcom::gedcom::US26() {
+	bool result = true;
+	
+	// check families for listed husband, wife and children. For each, check if an individual entry exists.
+	for (int i = 0; i < familyList.size(); i++) {
+		// check if listed husband in family has an individual entry
+		if (familyList[i].husband.id.length()!=0) {
+			bool found = false;
+			for (int j = 0; j < individualList.size(); j++) {
+				if (familyList[i].husband.id == individualList[j].id) {
+					found = true;
+				}
+			}			
+			if (!found) {
+				result = false;
+				std::cout << "US26 Fail (Missing individual's entry for husband) for Family with ID : " << familyList[i].id << "\n";
+			}
+		}
+
+		// check if listed wife in family has an individual entry
+		if (familyList[i].wife.id.length() != 0) {
+			bool found = false;
+			for (int j = 0; j < individualList.size(); j++) {
+				if (familyList[i].wife.id == individualList[j].id) {
+					found = true;
+				}
+			}
+			if (!found) {
+				result = false;
+				std::cout << "US26 Fail (Missing individual's entry for wife) for Family with ID : " << familyList[i].id << "\n";
+			}
+		}
+
+		// check if listed children in family each have an individual entry
+		if (familyList[i].children.size() != 0) {
+			for (int k = 0; k < familyList[i].children.size(); k++) {
+				bool found = false;
+				for (int j = 0; j < individualList.size(); j++) {
+					if (familyList[i].children[k].id == individualList[j].id) {
+						found = true;
+					}
+				}
+				if (!found) {
+					result = false;
+					std::cout << "US26 Fail (Missing individual's entry for child) for Family with ID : " << familyList[i].id << "\n";
+				}
+			}
+		}
+	}
+
+	// check individuals for listed families (famc and fams). For each, check if a family entry exists.
+	for (int i = 0; i < individualList.size(); i++) {
+		// check if listed famc has a family entry
+		if (individualList[i].famcId.length() != 0) {
+			bool found = false;
+			for (int j = 0; j < familyList.size(); j++) {
+				if (individualList[i].famcId == familyList[j].id) {
+					found = true;
+				}
+			}
+			if (!found) {
+				result = false;
+				std::cout << "US26 Fail (Missing FAMC entry) for Individual with ID : " << individualList[i].id << "\n";
+			}
+		}
+
+		// check if listed fams has a family entry
+		if (individualList[i].famsId.length() != 0) {
+			bool found = false;
+			for (int j = 0; j < familyList.size(); j++) {
+				if (individualList[i].famsId == familyList[j].id) {
+					found = true;
+				}
+			}
+			if (!found) {
+				result = false;
+				std::cout << "US26 Fail (Missing FAMS entry) for Individual with ID : " << individualList[i].id << "\n";
+			}
+		}
+	}
+
+	return result;
+}
