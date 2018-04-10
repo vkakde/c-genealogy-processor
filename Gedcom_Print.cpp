@@ -75,30 +75,58 @@ void Gedcom::gedcom::printFamilyTable() {
 	std::cout << std::endl;
 }
 
+
 ///\author gmccorma
 // List siblings in families by decreasing age, i.e. oldest siblings first
 void Gedcom::gedcom::US28() {
-	//const int count = 0;
-	std::vector<std::string> childIds;
-	
+	std::vector<std::string> birthDayVector;
+	std::vector<std::string> childrenInOrder;
 	for (auto it_family : familyList) {
-		// get dates of birth of each child
-		//std::cout << "Siblings in family " << it_family.id << ": " << it_family.childrenIds << std::endl;
-		for (std::vector<std::string>::const_iterator i = it_family.childrenIds.begin(); i != it_family.childrenIds.end(); ++i) {
-			for (auto it_individual : individualList) {
-				// find child, put into vector list
-				if (it_individual.id.compare(*i) == 0) {
-					childIds.push_back(it_individual.birthDay);
-					// count number of children in family
-					for (auto elem : it_family.childrenIds) {
-						const int count = std::count(it_family.childrenIds.begin(), it_family.childrenIds.end(), elem);
-					}
-					//std::string arr[count] = {};
-					std::cout << "Siblings in family " << it_family.id << ": " << it_individual.id << std::endl;
+		childrenInOrder.clear();
+		birthDayVector.clear();
+		for (int n = 0; n < it_family.children.size(); n++) {
+			birthDayVector.push_back(it_family.children[n].birthDay);
+		}
+		int i, j;
+		std::string key;
+		// sort sibling birth dates from youngest to oldest
+		for (i = 1; i < it_family.children.size(); i++) {
+			key = birthDayVector[i];
+			j = i - 1;
+			if ((boost::gregorian::from_uk_string(birthDayVector[j]).year() - boost::gregorian::from_uk_string(key).year() >= 0)) {
+				while (j >= 0) {
+					birthDayVector[j + 1] = birthDayVector[j];
+					j = j - 1;
 				}
+				birthDayVector[j + 1] = key;
+			}
+			else if ((boost::gregorian::from_uk_string(birthDayVector[j]).year() - boost::gregorian::from_uk_string(key).year() >= 0)) {
+				while (j >= 0) {
+					birthDayVector[j + 1] = birthDayVector[j];
+					j = j - 1;
+				}
+				birthDayVector[j + 1] = key;
+			}
+			else if ((boost::gregorian::from_uk_string(birthDayVector[j]).year() - boost::gregorian::from_uk_string(key).year() >= 0)) {
+				while (j >= 0) {
+					birthDayVector[j + 1] = birthDayVector[j];
+					j = j - 1;
+				}
+				birthDayVector[j + 1] = key;
 			}
 		}
 
+		for (int f = 0; f < it_family.children.size(); f++) {
+			for (int k = 0; k < birthDayVector.size(); k++) {
+				if (it_family.children[f].birthDay.compare(birthDayVector[k]) == 0) {
+					childrenInOrder.push_back(it_family.children[f].id);
+				}
+			}
+		}
+		//print individuals
+		for (int m = childrenInOrder.size(); m > 0; --m) {
+			std::cout << "Siblings in family " << it_family.id << " with ID: " << childrenInOrder[m-1] << std::endl;
+		}
 	}
 }
 
