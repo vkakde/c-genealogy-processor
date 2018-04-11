@@ -1,15 +1,14 @@
-0 NOTE https://github.com/vkakde/sw555MLGV
 0 HEAD
 1 SOUR Family Echo
 2 WWW http://www.familyecho.com/
-1 FILE My Family
-1 DATE 6 MAR 2018
+1 FILE Family 8
+1 DATE 10 APR 2018
 1 DEST ANSTFILE
 1 GEDC
 2 VERS 5.5.1
 2 FORM LINEAGE-LINKED
 1 SUBM @I1@
-2 NAME William Pickering
+2 NAME Bob Smith
 1 SUBN
 1 CHAR UTF-8
 0 @I1@ INDI
@@ -112,6 +111,15 @@
 1 BIRT
 2 DATE 3 JAN 1991
 1 FAMC @F2@
+0 @I11@ INDI
+1 NAME Blanket /Smith/
+2 GIVN Blanket
+2 SURN Smith
+2 _MARNM Smith
+1 SEX M
+1 BIRT
+2 DATE 29 APR 1970
+1 FAMC @F3@
 0 @F1@ FAM
 1 HUSB @I2@
 1 WIFE @I3@
@@ -134,6 +142,7 @@
 1 WIFE @I5@
 1 CHIL @I2@
 1 CHIL @I6@
+1 CHIL @I11@
 1 MARR
 2 DATE 2 MAR 1958
 1 _CURRENT Y
