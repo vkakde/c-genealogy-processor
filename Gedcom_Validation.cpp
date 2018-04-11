@@ -686,8 +686,8 @@ bool Gedcom::gedcom::US20() {
 				if (it_individual.id.compare(*i) == 0) {
 					// if child spouse id 
 					if (it_individual.famsId == id) {
-						result = false;
 						if (!id.empty()) {
+							result = false;
 							std::cout << "US20 Fail (Aunts and uncles should not marry their nieces or nephews) for Family with ID : " << id << std::endl;
 						}
 						return result;
