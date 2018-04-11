@@ -573,12 +573,16 @@ bool Gedcom::gedcom::US17() {
 // Siblings should not marry one another
 bool Gedcom::gedcom::US18() {
 	bool result = true;
-	for (auto it_family : familyList) {
-		for (auto it_individual : individualList) {
-			if (it_family.husband.famsId == it_family.wife.famsId && it_family.husband.famcId == it_family.wife.famcId) {
-				result = false;
-				std::cout << "US18 Fail (Siblings should not marry) for Individuals with ID : " << it_family.husbandId << " " << it_family.wifeId << std::endl;
-				return result;
+	for (int i = 0; i < familyList.size(); i++) {
+		if (familyList[i].children.size() != 0) {
+			for (int j = 0; j < familyList[i].children.size(); j++) {
+				for (int k = 0; k < familyList[i].children.size(); k++) {
+					if (j != k && familyList[i].children[j].famsId == familyList[i].children[k].famsId) {
+						result = false;
+						std::cout << "US18 Fail (Siblings should not marry) for Individuals with ID : " << familyList[i].husbandId << " " << familyList[i].wifeId << std::endl;
+						return result;
+					}
+				}
 			}
 		}
 	}
@@ -683,7 +687,9 @@ bool Gedcom::gedcom::US20() {
 					// if child spouse id 
 					if (it_individual.famsId == id) {
 						result = false;
-						std::cout << "US20 Fail (Aunts and uncles should not marry their nieces or nephews) for Family with ID : " << id << std::endl;
+						if (!id.empty()) {
+							std::cout << "US20 Fail (Aunts and uncles should not marry their nieces or nephews) for Family with ID : " << id << std::endl;
+						}
 						return result;
 					}
 				}
